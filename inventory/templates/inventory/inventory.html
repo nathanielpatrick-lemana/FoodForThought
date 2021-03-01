@@ -48,10 +48,10 @@ li a:hover:not(.active) {
 {% if user.is_authenticated %}
     <ul>
         <li><h1>Food for Thought</h1></li>
-        <li><a href="/">Home</a></li>
-        <li><a href="/inventory">Inventory</a></li>
-        <li><a href="/">Suppliers</a></li>
-        <li><a href="/">Recipes</a></li>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'inventory' %}">Inventory</a></li>
+        <li><a href="{% url 'home' %}">Suppliers</a></li>
+        <li><a href="{% url 'home' %}">Recipes</a></li>
     </ul>
     <div style="margin-left:17%;padding:1px 16px;height:1000px;">
     <h1>Inventory</h1>

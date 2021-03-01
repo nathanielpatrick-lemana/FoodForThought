@@ -44,7 +44,7 @@ li a {
             {{ form.as_p }}
             <button type="submit">Log In</button>
         </form>
-        <a href="/accounts/password_reset">Forgot password</a>
-        <a href="/accounts/signup/">New user? Sign up here</a>
+        <a href="{% url 'password_reset' %}">Forgot password</a>
+        <a href="{% url 'signup' %}">New user? Sign up here</a>
     </div>
 {% endblock %}
