@@ -54,19 +54,31 @@ li a:hover:not(.active) {
         <li><a href="/">Recipes</a></li>
     </ul>
     <div style="margin-left:17%;padding:1px 16px;height:1000px;">
+    <h1>Inventory</h1>
         {% if items %}
-    <ul>
-    {% for item in items %}
-        <li><a>{{ item.name }} {{ item.quantity }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Nothing is in stock apparently</p>
-{% endif %}
+            <table style="width:100%">
+            <tr>
+                <th>Item</th>
+                <th>Quantity (in units)</th>
+                <th>Restock level (in units)</th>
+                <th>Restock date</th>
+            </tr>
+                {% for item in items %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.restock_quantity }}</td>
+                        <td>{{ item.restock_date }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>Nothing is in stock apparently</p>
+        {% endif %}
     </div>
-{% else %}
-  <p>You are not logged in</p>
-  <a href="{% url 'login' %}">Log In</a>
-      <p><a href="{% url 'password_reset' %}">Reset Password</a></p>
-{% endif %}
+    {% else %}
+        <p>You are not logged in</p>
+        <a href="{% url 'login' %}">Log In</a>
+         <p><a href="{% url 'password_reset' %}">Reset Password</a></p>
+    {% endif %}
 {% endblock %}
