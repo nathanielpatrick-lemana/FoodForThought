@@ -54,10 +54,15 @@ li a:hover:not(.active) {
         <li><a href="/">Recipes</a></li>
     </ul>
     <div style="margin-left:17%;padding:1px 16px;height:1000px;">
-        <h1>Welcome, {{ user.username }}!</h1>
-        <p><a>Welcome to the Food For Thought interface.</a></p>
-        <p><a href="{% url 'logout' %}">Log Out</a></p>
-        <p><a href="{% url 'password_reset' %}">Reset Password</a></p>
+        {% if items %}
+    <ul>
+    {% for item in items %}
+        <li><a>{{ item.name }} {{ item.quantity }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Nothing is in stock apparently</p>
+{% endif %}
     </div>
 {% else %}
   <p>You are not logged in</p>

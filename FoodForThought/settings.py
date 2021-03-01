@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'inventory',
 ]
 
 MIDDLEWARE = [
@@ -77,8 +78,12 @@ WSGI_APPLICATION = 'FoodForThought.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_cs204',
+        'USER': 'admin',
+        'PASSWORD': 'food-for-thought',
+        'HOST': 'fft204.chkn7rtufeos.us-east-2.rds.amazonaws.com',
+        'PORT': '3306',
     }
 }
 

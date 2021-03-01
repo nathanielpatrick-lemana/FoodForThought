@@ -2,11 +2,47 @@
 
 {% block title %}Login{% endblock %}
 
+{% block stylesheet %}
+body {
+  margin: 0;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 17%;
+  background-color: #cc0000;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+li a {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+    li h1 {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+{%  endblock %}
+
 {% block content %}
-<h2>Log In</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Log In</button>
-</form>
+    <ul>
+        <li><h1>Food for Thought</h1></li>
+    </ul>
+    <div style="margin-left:17%;padding:1px 16px;height:1000px;">
+        <h2>Log In</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Log In</button>
+        </form>
+    </div>
 {% endblock %}
