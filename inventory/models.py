@@ -35,7 +35,7 @@ class Orders(models.Model):
     order_date = models.DateField()
 
     def __str__(self):
-        return self.order
+        return str(self.order)
 
 
 class CustomerOrders(models.Model):
