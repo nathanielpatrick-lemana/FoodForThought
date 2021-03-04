@@ -54,24 +54,11 @@ li a:hover:not(.active) {
         <ul>
             <li><h1>Your Favorite Restaurant</h1></li>
             <li><a href="/">Home</a></li>
-            <li><a href="">Menu</a></li>
+            <li><a href="customer/menu">Menu</a></li>
             <li><h4>Powered by Food for Thought</h4></li>
         </ul>
         <div style="margin-left:17%;padding:1px 16px;height:1000px;">
-            <h1>Menu</h1>
-                    <table style="width:100%">
-                    <tr>
-                        <th>Item</th>
-                        <th>Price</th>
-                        <th>Description</th>
-                    </tr>
-                        {% for item in items %}
-                            <tr>
-                                <td>{{ item.name }}</td>
-                                <td>${{ item.price }}</td>
-                                <td>{{ item.description }}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
+            <h1>Welcome to your favorite restaurant, powered by the Food For Thought restaurant interface.</h1>
+            <a href="management/accounts/login">Employee Login</a>
         </div>
 {% endblock %}

@@ -39,12 +39,12 @@ li a {
     </ul>
     <div style="margin-left:17%;padding:1px 16px;height:1000px;">
         <h2>Log In</h2>
+        <a>New employees: please contact your manager to create your account.</a>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Log In</button>
         </form>
-        <a href="{% url 'password_reset' %}">Forgot password</a>
-        <a href="{% url 'signup' %}">New user? Sign up here</a>
+        <a href="{% url 'password_reset' %}">Forgot password?</a>
     </div>
 {% endblock %}

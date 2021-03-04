@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Inventory{% endblock %}
 
 {% block stylesheet %}
 body {
@@ -55,20 +55,22 @@ li a:hover:not(.active) {
     </ul>
     <div style="margin-left:17%;padding:1px 16px;height:1000px;">
     <h1>Inventory</h1>
-        {% if items %}
+        {% if ingredients and instocks %}
             <table style="width:100%">
             <tr>
+                <th>ID</th>
                 <th>Item</th>
                 <th>Quantity (in units)</th>
                 <th>Restock level (in units)</th>
-                <th>Restock date</th>
+                <th>Restock Date</th>
             </tr>
-                {% for item in items %}
+                {% for ingredients in ingredients %}
                     <tr>
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.quantity }}</td>
-                        <td>{{ item.restock_quantity }}</td>
-                        <td>{{ item.restock_date }}</td>
+                        <td>{{ ingredients.id }}</td>
+                        <td>{{ ingredients.ingredient_name }}</td>
+                        <td>{{ ingredients.quantity }}</td>
+                        <td>{{ instocks.restock_level }}</td>
+                        <td>{{ ingredients.restock_date }}</td>
                     </tr>
                 {% endfor %}
             </table>
