@@ -8,7 +8,7 @@ class Item(models.Model):
     description = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.name
+        return 'item id: {}  item name: {}'.format(self.id, self.name)
 
 
 class Ingredients(models.Model):
@@ -27,7 +27,7 @@ class RecipeItem(models.Model):
     quantity = models.IntegerField()
 
     def __str__(self):
-        return self.menu_item_id
+        return 'ingredient id: {}  and  menu id: {}'.format(self.ingredient_id, self.menu_item_id)
 
 
 class Orders(models.Model):
@@ -35,7 +35,7 @@ class Orders(models.Model):
     order_date = models.DateField()
 
     def __str__(self):
-        return str(self.order)
+        return 'order id: {}'.format(self.order)
 
 
 class CustomerOrders(models.Model):
@@ -44,7 +44,7 @@ class CustomerOrders(models.Model):
     quantity = models.IntegerField()
 
     def __str__(self):
-        return self.order_id
+        return 'order id:{} and menu id: {}'.format(self.order_id, self.menu_item_id)
 
 
 class ItemStockLevels(models.Model):
