@@ -4,6 +4,12 @@ from django.contrib.auth.decorators import user_passes_test
 from .models import Item
 from .models import Ingredients
 from .models import ItemStockLevels
+from .models import CustomerOrders
+from .models import Orders
+import datetime
+from .forms import OrderForm
+import random
+from django.forms import formset_factory
 
 
 # Create your views here.
@@ -14,20 +20,45 @@ def employee(user):
 
 def menu(request):
     items = Item.objects.all()
-    template = loader.get_template('customer/order.html')
+    template = loader.get_template('customer/menu.html')
     context = {
         'items': items,
     }
-    return render(request, 'customer/order.html', context)
+    return render(request, 'customer/menu.html', context)
+
+
+def order(request):
+    items = Item.objects.all()
+
+    # creating a formset
+    OrderFormSet = formset_factory(OrderForm)
+    formset = OrderFormSet(request.POST or None)
+
+    if formset.is_valid():
+        new_id = random.randint(1000, 9999)
+        counter = 1
+        neworder = Orders(new_id, datetime.date.today())
+        neworder.save()
+        for form in formset:
+            custor = CustomerOrders(counter + 300, new_id, counter, form.cleaned_data['item_quantity'])
+            custor.save()
+            counter = counter + 1
+
+    # Add the formset to context dictionary
+    context = {
+        'items': items,
+        'formset': formset,
+    }
+    return render(request, "customer/order.html", context)
 
 
 @user_passes_test(employee)
 def inventory(request):
-    instock = Ingredients.objects.all()
+    instocks = Ingredients.objects.all()
     ingredients = ItemStockLevels.objects.all()
     template = loader.get_template('inventory/inventory.html')
     context = {
         'ingredients': ingredients,
-        'instocks': instock,
+        'instocks': instocks,
     }
     return render(request, 'inventory/inventory.html', context)

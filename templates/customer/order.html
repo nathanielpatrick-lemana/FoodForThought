@@ -53,25 +53,34 @@ li a:hover:not(.active) {
 {% block content %}
         <ul>
             <li><h1>Your Favorite Restaurant</h1></li>
-            <li><a href="/">Home</a></li>
-            <li><a href="">Menu</a></li>
+            <li><a href={% url "cust_home" %}>Home</a></li>
+            <li><a href={% url "menu" %}>Menu</a></li>
+            <li><a href="{% url "order" %}">Order</a></li>
             <li><h4>Powered by Food for Thought</h4></li>
         </ul>
         <div style="margin-left:17%;padding:1px 16px;height:1000px;">
-            <h1>Menu</h1>
-                    <table style="width:100%">
+            <h1>Order from Your Favorite Restaurant!</h1>
+        <form action="" method="post" enctype="multipart/form-data"><table style="width:100%">
+        {% csrf_token %}
                     <tr>
                         <th>Item</th>
                         <th>Price</th>
-                        <th>Description</th>
                     </tr>
+
                         {% for item in items %}
                             <tr>
                                 <td>{{ item.name }}</td>
                                 <td>${{ item.price }}</td>
-                                <td>{{ item.description }}</td>
                             </tr>
                         {% endfor %}
                     </table>
+                    <table>
+                        {{ formset.management_form }}
+                        {% for formset in formset %}
+                            <td>{{ formset.as_table }}</td>
+                        {% endfor %}
+                    </table>
+                <input type="submit" value="Order now!">
+        </form>
         </div>
 {% endblock %}

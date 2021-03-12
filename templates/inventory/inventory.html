@@ -61,7 +61,6 @@ li a:hover:not(.active) {
                 <th>ID</th>
                 <th>Item</th>
                 <th>Quantity (in units)</th>
-                <th>Restock level (in units)</th>
                 <th>Restock Date</th>
             </tr>
                 {% for ingredients in ingredients %}
@@ -69,10 +68,9 @@ li a:hover:not(.active) {
                         <td>{{ ingredients.id }}</td>
                         <td>{{ ingredients.ingredient_name }}</td>
                         <td>{{ ingredients.quantity }}</td>
-                        <td>{{ instocks.restock_level }}</td>
                         <td>{{ ingredients.restock_date }}</td>
-                    </tr>
                 {% endfor %}
+                     </tr>
             </table>
         {% else %}
             <p>Nothing is in stock apparently</p>
