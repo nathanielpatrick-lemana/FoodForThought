@@ -45,7 +45,7 @@ li a:hover:not(.active) {
 {% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}
+    {% if user.is_authenticated %}
     <ul>
         <li><h1>Food for Thought</h1></li>
         <li><a href="{% url 'home' %}">Home</a></li>
@@ -54,27 +54,24 @@ li a:hover:not(.active) {
         <li><a href="{% url 'home' %}">Recipes</a></li>
     </ul>
     <div style="margin-left:17%;padding:1px 16px;height:1000px;">
-    <h1>Inventory</h1>
-        {% if ingredients and instocks %}
-            <table style="width:100%">
-            <tr>
-                <th>ID</th>
-                <th>Item</th>
-                <th>Quantity (in units)</th>
-                <th>Restock Date</th>
-            </tr>
-                {% for ingredients in ingredients %}
+        <h1>Supply Management</h1>
+        <h2 style="color: red">The following items require your attention</h2>
+        <table style="width:100%">
+                <tr>
+                    <th>Ingredient</th>
+                    <th>Quantity remaining</th>
+                    <th>Recommended order quantity</th>
+                </tr>
+            {% for ingredients in ingredients %}
+                {%  if ingredients.quantity < 300 %}
                     <tr>
-                        <td>{{ ingredients.id }}</td>
                         <td>{{ ingredients.ingredient_name }}</td>
                         <td>{{ ingredients.quantity }}</td>
-                        <td>{{ ingredients.restock_date }}</td>
-                {% endfor %}
-                     </tr>
-            </table>
-        {% else %}
-            <p>Nothing is in stock apparently</p>
-        {% endif %}
+                        <td>500</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
     </div>
     {% else %}
         <p>You are not logged in</p>

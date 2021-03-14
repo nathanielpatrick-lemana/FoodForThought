@@ -31,8 +31,8 @@ def order(request):
     items = Item.objects.all()
 
     # creating a formset
-    OrderFormSet = formset_factory(OrderForm)
-    formset = OrderFormSet(request.POST or None)
+    OrderFormSet = formset_factory(OrderForm, extra=10)
+    formset = OrderFormSet(request.POST or None, initial=0)
 
     if formset.is_valid():
         new_id = random.randint(1000, 9999)
@@ -40,7 +40,8 @@ def order(request):
         neworder = Orders(new_id, datetime.date.today())
         neworder.save()
         for form in formset:
-            custor = CustomerOrders(counter + 300, new_id, counter, form.cleaned_data['item_quantity'])
+            quantity = form.cleaned_data.get('item_quantity', 0)
+            custor = CustomerOrders(counter * new_id, new_id, counter, quantity)
             custor.save()
             counter = counter + 1
 
@@ -50,7 +51,6 @@ def order(request):
         'formset': formset,
     }
     return render(request, "customer/order.html", context)
-
 
 @user_passes_test(employee)
 def inventory(request):
@@ -62,3 +62,13 @@ def inventory(request):
         'instocks': instocks,
     }
     return render(request, 'inventory/inventory.html', context)
+
+def suppman(request):
+    instocks = Ingredients.objects.all()
+    ingredients = ItemStockLevels.objects.all()
+    template = loader.get_template('inventory/suppman.html')
+    context = {
+        'ingredients': ingredients,
+        'instocks': instocks,
+    }
+    return render(request, 'inventory/suppman.html', context)

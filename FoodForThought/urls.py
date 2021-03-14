@@ -22,6 +22,7 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='customer/customer_home.html'), name='cust_home'),
     path('customer/menu/', views.menu, name='menu'),
     path('customer/order/', views.order, name='order'),
+    path('management/supplymgmt/', views.suppman, name='suppman'),
     path('management/admin/', admin.site.urls),
     path('management/accounts/', include('accounts.urls')),
     path('management/inventory/', include('inventory.urls')),

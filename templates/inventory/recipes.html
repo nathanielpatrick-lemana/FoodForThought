@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Inventory{% endblock %}
 
 {% block stylesheet %}
 body {
@@ -45,7 +45,7 @@ li a:hover:not(.active) {
 {% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}
+    {% if user.is_authenticated %}
     <ul>
         <li><h1>Food for Thought</h1></li>
         <li><a href="{% url 'home' %}">Home</a></li>
@@ -54,18 +54,28 @@ li a:hover:not(.active) {
         <li><a href="{% url 'home' %}">Recipes</a></li>
     </ul>
     <div style="margin-left:17%;padding:1px 16px;height:1000px;">
-        <h1>Welcome, {{ user.username }}!</h1>
-        <p><a>Welcome to the Food For Thought interface.</a></p>
-        <p><a href="{% url 'logout' %}">Log Out</a></p>
-        <p><a href="{% url 'password_reset' %}">Reset Password</a></p>
+        <h1>Recipes</h1>
+        <h2 style="color: red">The following items require your attention</h2>
+        <table style="width:100%">
+                <tr>
+                    <th>Ingredient</th>
+                    <th>Quantity remaining</th>
+                    <th>Recommended order quantity</th>
+                </tr>
+            {% for ingredients in ingredients %}
+                {%  if ingredients.quantity < 300 %}
+                    <tr>
+                        <td>{{ ingredients.ingredient_name }}</td>
+                        <td>{{ ingredients.quantity }}</td>
+                        <td>500</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
     </div>
-{% else %}
-  <ul>
-      <li><h1>Food for Thought</h1></li>
-  </ul>
-  <div style="margin-left:17%;padding:1px 16px;height:1000px;">
-    <p>This is the restaurant management site. Employees, please log in below.</p>
-    <a href="{% url 'login' %}">Employee Log In</a>
-  </div>
-{% endif %}
+    {% else %}
+        <p>You are not logged in</p>
+        <a href="{% url 'login' %}">Log In</a>
+         <p><a href="{% url 'password_reset' %}">Reset Password</a></p>
+    {% endif %}
 {% endblock %}
