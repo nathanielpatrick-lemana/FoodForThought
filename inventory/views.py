@@ -8,6 +8,7 @@ from .models import CustomerOrders
 from .models import Orders
 import datetime
 from .forms import OrderForm
+from .forms import IngredientForm
 import random
 from django.forms import formset_factory
 from django.http import JsonResponse
@@ -60,12 +61,26 @@ def order(request):
 
 @user_passes_test(employee)
 def inventory(request):
+    form = IngredientForm(request.POST or None)
     instocks = Ingredients.objects.all()
     ingredients = ItemStockLevels.objects.all()
     template = loader.get_template('inventory/inventory.html')
+    if form.is_valid():
+        newing = Ingredients(len(Ingredients.objects.filter()) + 1, form.cleaned_data.get('name'), 30, 'unit')
+        newing2 = ItemStockLevels(len(ItemStockLevels.objects.filter()) + 1, len(ItemStockLevels.objects.filter()) + 1,
+                                  form.cleaned_data.get('name'), form.cleaned_data.get('quantity'), datetime.date.today(),)
+        newing.save()
+        newing2.save()
+        context = {
+            'ingredients': ingredients,
+            'instocks': instocks,
+            'form': form,
+        }
+        return render(request, 'inventory/inventory.html', context)
     context = {
         'ingredients': ingredients,
         'instocks': instocks,
+        'form': form,
     }
     return render(request, 'inventory/inventory.html', context)
 

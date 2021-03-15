@@ -60,6 +60,7 @@ li a:hover:not(.active) {
         </ul>
         <div style="margin-left:17%;padding:1px 16px;height:1000px;">
             <h1>Menu</h1>
+            <h2>Craving for things on this page? Order on our <a href="{% url "order" %}">ordering page!</a></h2>
                     <table style="width:100%">
                     <tr>
                         <th>Item</th>
@@ -71,7 +72,7 @@ li a:hover:not(.active) {
                                 <td>{{ item.name }}</td>
                                 <td>${{ item.price }}</td>
                                 <td>{{ item.description }}</td>
-                                <td><img src="https://cdn.discordapp.com/attachments/798661624181293086/820820581439897600/calzone-926449_1920.jpg" style="width:320px; height:214px;"></td>
+                                <td><img src="{{ item.image }}" alt="Food image" style="width:320px; height:214px;"></td>
                             </tr>
                         {% endfor %}
                     </table>

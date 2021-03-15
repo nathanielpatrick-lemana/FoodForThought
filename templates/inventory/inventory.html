@@ -80,6 +80,13 @@ li a:hover:not(.active) {
                 {% endfor %}
                      </tr>
             </table>
+            <h2>Add new ingredient</h2>
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.management_form }}
+                {{ form.as_p }}
+            <input type="submit" value="Add new ingredient">
+            </form>
         {% else %}
             <p>Nothing is in stock apparently</p>
         {% endif %}
