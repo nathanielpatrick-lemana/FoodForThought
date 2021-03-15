@@ -51,8 +51,8 @@ li a:hover:not(.active) {
 {% endblock %}
 
 {% block content %}
-        <ul>
-            <li><h1>Your Favorite Restaurant</h1></li>
+         <ul>
+            <li><h1>Frankie's Italian Cuisine</h1></li>
             <li><a href={% url "cust_home" %}>Home</a></li>
             <li><a href={% url "menu" %}>Menu</a></li>
             <li><a href="{% url "order" %}">Order</a></li>
@@ -71,6 +71,7 @@ li a:hover:not(.active) {
                                 <td>{{ item.name }}</td>
                                 <td>${{ item.price }}</td>
                                 <td>{{ item.description }}</td>
+                                <td><img src="https://cdn.discordapp.com/attachments/798661624181293086/820820581439897600/calzone-926449_1920.jpg" style="width:320px; height:214px;"></td>
                             </tr>
                         {% endfor %}
                     </table>

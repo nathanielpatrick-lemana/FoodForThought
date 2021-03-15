@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventory{% endblock %}
+
+{% block stylesheet %}
+body {
+  margin: 0;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 17%;
+  background-color: #cc0000;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+li a {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+    li h1 {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+   li h2 {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a.active {
+  background-color: maroon;
+  color: white;
+}
+
+li a:hover:not(.active) {
+  background-color: maroon;
+  color: white;
+}
+{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+    <ul>
+        <li><h1>Food for Thought</h1></li>
+        <li><h2>Frankie's Italian Cuisine</h2></li>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'inventory' %}">Inventory</a></li>
+        <li><a href="{% url 'suppman' %}">Supply Management</a></li>
+        <li><a href="{% url 'sales' %}">Sales</a></li>
+        <li><a href="{% url 'home' %}">Recipes</a></li>
+    </ul>
+    <div style="margin-left:17%;padding:1px 16px;height:1000px;">
+        <h1>Sales</h1>
+        <h2 style="color: red">Nothing here yet!</h2>
+    </div>
+    {% else %}
+        <p>You are not logged in</p>
+        <a href="{% url 'login' %}">Log In</a>
+         <p><a href="{% url 'password_reset' %}">Reset Password</a></p>
+    {% endif %}
+{% endblock %}

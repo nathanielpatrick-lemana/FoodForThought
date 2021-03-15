@@ -32,6 +32,12 @@ li a {
   text-decoration: none;
 }
 
+       li h2 {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+}
 
 li a.active {
   background-color: maroon;
@@ -48,9 +54,11 @@ li a:hover:not(.active) {
 {% if user.is_authenticated %}
     <ul>
         <li><h1>Food for Thought</h1></li>
+        <li><h2>Frankie's Italian Cuisine</h2></li>
         <li><a href="{% url 'home' %}">Home</a></li>
         <li><a href="{% url 'inventory' %}">Inventory</a></li>
         <li><a href="{% url 'suppman' %}">Supply Management</a></li>
+        <li><a href="{% url 'sales' %}">Sales</a></li>
         <li><a href="{% url 'home' %}">Recipes</a></li>
     </ul>
     <div style="margin-left:17%;padding:1px 16px;height:1000px;">

@@ -44,6 +44,10 @@ def order(request):
             custor = CustomerOrders(counter * new_id, new_id, counter, quantity)
             custor.save()
             counter = counter + 1
+        context = {
+            'new_id': new_id,
+        }
+        return render(request, "customer/order_confirmed.html", context)
 
     # Add the formset to context dictionary
     context = {
@@ -63,6 +67,7 @@ def inventory(request):
     }
     return render(request, 'inventory/inventory.html', context)
 
+@user_passes_test(employee)
 def suppman(request):
     instocks = Ingredients.objects.all()
     ingredients = ItemStockLevels.objects.all()
@@ -72,3 +77,14 @@ def suppman(request):
         'instocks': instocks,
     }
     return render(request, 'inventory/suppman.html', context)
+
+@user_passes_test(employee)
+def sales(request):
+    instocks = Ingredients.objects.all()
+    ingredients = ItemStockLevels.objects.all()
+    template = loader.get_template('inventory/sales.html')
+    context = {
+        'ingredients': ingredients,
+        'instocks': instocks,
+    }
+    return render(request, 'inventory/sales.html', context)

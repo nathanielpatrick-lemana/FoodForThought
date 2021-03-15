@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block stylesheet %}
+body {
+  margin: 0;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 17%;
+  background-color: #cc0000;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+li a {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+    li h1 {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+        li h4 {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a.active {
+  background-color: maroon;
+  color: white;
+}
+
+li a:hover:not(.active) {
+  background-color: maroon;
+  color: white;
+}
+{% endblock %}
+
+{% block content %}
+        <ul>
+            <li><h1>Frankie's Italian Cuisine</h1></li>
+            <li><a href={% url "cust_home" %}>Home</a></li>
+            <li><a href={% url "menu" %}>Menu</a></li>
+            <li><a href="{% url "order" %}">Order</a></li>
+            <li><h4>Powered by Food for Thought</h4></li>
+        </ul>
+        <div style="margin-left:17%;padding:1px 16px;height:1000px;">
+            <h1>Your order has been confirmed!</h1>
+            <h2>Your order number is {{ new_id }}. Please take note of this order number when you arrive at the restaurant.</h2>
+        </div>
+{% endblock %}

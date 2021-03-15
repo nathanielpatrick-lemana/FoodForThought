@@ -31,11 +31,36 @@ li a {
   padding: 8px 16px;
   text-decoration: none;
 }
+    li h2 {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+        li h4 {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a.active {
+  background-color: maroon;
+  color: white;
+}
+
+li a:hover:not(.active) {
+  background-color: maroon;
+  color: white;
+}
 {%  endblock %}
 
 {% block content %}
     <ul>
         <li><h1>Food for Thought</h1></li>
+        <li><h2>Frankie's Italian Cuisine</h2></li>
+        <li><a href="{% url 'cust_home' %}">Customer Home</a></li>
     </ul>
     <div style="margin-left:17%;padding:1px 16px;height:1000px;">
         <h2>Log In</h2>
