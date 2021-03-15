@@ -10,6 +10,7 @@ import datetime
 from .forms import OrderForm
 import random
 from django.forms import formset_factory
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -56,6 +57,7 @@ def order(request):
     }
     return render(request, "customer/order.html", context)
 
+
 @user_passes_test(employee)
 def inventory(request):
     instocks = Ingredients.objects.all()
@@ -66,6 +68,7 @@ def inventory(request):
         'instocks': instocks,
     }
     return render(request, 'inventory/inventory.html', context)
+
 
 @user_passes_test(employee)
 def suppman(request):
@@ -78,6 +81,7 @@ def suppman(request):
     }
     return render(request, 'inventory/suppman.html', context)
 
+
 @user_passes_test(employee)
 def sales(request):
     instocks = Ingredients.objects.all()
@@ -88,3 +92,13 @@ def sales(request):
         'instocks': instocks,
     }
     return render(request, 'inventory/sales.html', context)
+
+
+def PieSalesChart(request):
+    labels = ['Cheese Pizza', 'Meat lovers', 'Chicken Parm', 'Eggplant Parm', 'Meatball Parm', 'Chicken Parm Calzone', 'Eggplant Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Salad', 'Cobb Salad']
+    data = [65, 33, 33, 25, 75, 23, 78, 37, 55, 21]
+
+    return render(request, 'sales.html', {
+        'labels': labels,
+        'Data': data,
+    })
