@@ -22,11 +22,11 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='customer/customer_home.html'), name='cust_home'),
     path('customer/menu/', views.menu, name='menu'),
     path('customer/order/', views.order, name='order'),
-    path('management/inventory/', views.sales, name='sales'),
+    path('management/sales/', views.sales, name='sales'),
+    path('management/inventory/', views.inventory, name='inventory'),
     path('management/supplymgmt/', views.suppman, name='suppman'),
     path('management/admin/', admin.site.urls),
     path('management/accounts/', include('accounts.urls')),
-    path('management/inventory/', include('inventory.urls')),
     path('management/accounts/', include('django.contrib.auth.urls')),
     path('management/home/', TemplateView.as_view(template_name='management/management_home.html'), name='home'),
 ]
