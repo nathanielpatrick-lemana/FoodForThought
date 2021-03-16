@@ -67,41 +67,39 @@ li a:hover:not(.active) {
     </ul>
     <div style="margin-left:17%;padding:1px 16px;height:1000px;">
         <h1>Sales</h1>
-        <canvas id="myChart" width="100" height="100"></canvas>
-        <div id="container" style="width: 100%; height: 75%"></div>
-    <script>
-      anychart.onDocumentReady(function() {
 
-        // set the data
-        var data = {
-            header: ["Menu Item Name", "Sold"],
-            rows: [
-              ["Cheese Pizza", 450],
-              ["Meat Lovers", 200],
-              ["Chicken Parmigiana", 400],
-              ["Eggplant Parmigiana", 350],
-              ["Meatball Parmigiana", 242],
-              ["Chicken Parm Calzone", 250],
-              ["Eggplant Parm Calzone", 330],
-              ["Buffalo Chicken Calzone", 500],
-              ["Chicken BLT Salad", 175],
-              ["Cobb Salad", 101],
-        ]};
-
-        // create the chart
-        var chart = anychart.bar();
-
-        // add the data
-        chart.data(data);
-
-        // set the chart title
-        chart.title("Sales By Menu Item");
-
-        // draw
-        chart.container("container");
-        chart.draw();
-      });
-    </script>
+        <div class="col-md-10 col-12 mx-auto" >
+            <div class="row">
+                <div class="col-md-6 col-12">
+                    <div class="card" style="width:500px;height:500px;margin-top:30px;">
+                        <div class="body">
+                            <canvas id="SaleByProduct" width="450" height="450"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="card" style="width:500px;height:500px;margin-top:30px;">
+                        <div class="body">
+                            <canvas id="SaleCount" width="450" height="450"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="card" style="width:500px;height:500px;margin-top:30px;">
+                        <div class="body">
+                            <canvas id="SalesMonthCount" width="450" height="450"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="card" style="width:500px;height:500px;margin-top:30px;">
+                        <div class="body">
+                            <canvas id="SalesYearCount" width="450" height="450"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     {% else %}
         <p>You are not logged in</p>
