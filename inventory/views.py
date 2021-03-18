@@ -65,7 +65,8 @@ def inventory(request):
     if form.is_valid():
         newing = Ingredients(len(Ingredients.objects.filter()) + 1, form.cleaned_data.get('name'), 30, 'unit')
         newing2 = ItemStockLevels(len(ItemStockLevels.objects.filter()) + 1, len(ItemStockLevels.objects.filter()) + 1,
-                                  form.cleaned_data.get('name'), form.cleaned_data.get('quantity'), datetime.date.today(),)
+                                  form.cleaned_data.get('name'), form.cleaned_data.get('quantity'),
+                                  datetime.date.today(), )
         newing.save()
         newing2.save()
         context = {
@@ -120,10 +121,10 @@ def sales(request):
 
 
 def PieSalesChart(request):
-    labels = ['Cheese Pizza', 'Meat lovers', 'Chicken Parm', 'Eggplant Parm', 'Meatball Parm', 'Chicken Parm Calzone', 'Eggplant Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Salad', 'Cobb Salad']
-    data = [65, 33, 33, 25, 75, 23, 78, 37, 55, 21]
 
-    return render(request, 'sales.html', {
-        'labels': labels,
-        'Data': data,
-    })
+    template = 'templates/inventory/sales.html'
+
+    return render(request, template)
+
+
+
