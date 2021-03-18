@@ -25,6 +25,12 @@ li a {
   padding: 8px 16px;
   text-decoration: none;
 }
+    li b {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+}
 
     li h1 {
   display: block;
@@ -57,11 +63,23 @@ li a:hover:not(.active) {
             <li><a href={% url "cust_home" %}>Home</a></li>
             <li><a href={% url "menu" %}>Menu</a></li>
             <li><a href="{% url "order" %}">Order</a></li>
+            <li><b href=null></b></li>
+            {% if user.is_authenticated %}
+                        <li><a href="{% url "logout" %}">Log Out</a></li>
+            {% else %}
+                        <li><a href="{% url "login" %}">Log In</a></li>
+                        <li><a href="{% url "custsignup" %}">Create Account</a></li>
+            {% endif %}
             <li><h4>Powered by Food for Thought</h4></li>
         </ul>
         <div style="margin-left:17%;padding:1px 16px;height:1000px;background-image: url(https://cdn.discordapp.com/attachments/798661624181293086/820825114051870740/restaurant_interior.jpg);">
             <h1>Welcome to Frankie's Italian Cuisine!</h1>
             <h2>At Frankie's, we have a history dating back over 100 years of culinary excellence. Founded in 1903 in Derry, New Hampshire by first-generation immigrant Frank Fillocini, we have become southern New Hampshire's best Italian establishment. We hope we deliver the phenomenal dining experience we strive to give you!</h2>
+            {% if user.is_authenticated %}
+                <h3>Welcome, {{ user.username }}! <a href="{% url "order" %}">Order now!</a></h3>
+            {% else %}
+                <h3>You are not logged in. <a href="{% url "custsignup" %}">Create an account here,</a> or <a href="{% url "login" %}">login here.</a></h3>
+            {% endif %}
             <table style="width:100%;">
                 <tr>
                     <td><img src="https://cdn.discordapp.com/attachments/798661624181293086/820829543311867914/image.jpg" alt="Tomato and mushroom" style="width:600px;height:450px;padding:1px 160px;border: 2px burlywood;"></td>
@@ -69,6 +87,5 @@ li a:hover:not(.active) {
                 </tr>
             </table>
             <h3>Powered by the Food For Thought restaurant management platform.</h3>
-            <a href="management/accounts/login">Employee Login</a>
         </div>
 {% endblock %}

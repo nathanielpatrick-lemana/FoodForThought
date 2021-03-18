@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.template import loader
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.admin.views.decorators import  staff_member_required
 from .models import Item
 from .models import Ingredients
 from .models import ItemStockLevels
@@ -9,16 +9,13 @@ from .models import Orders
 import datetime
 from .forms import OrderForm
 from .forms import IngredientForm
+from .forms import RestockForm
 import random
 from django.forms import formset_factory
 from django.http import JsonResponse
 
 
 # Create your views here.
-
-def employee(user):
-    return user.groups.filter(name='Employee').exists()
-
 
 def menu(request):
     items = Item.objects.all()
@@ -59,7 +56,7 @@ def order(request):
     return render(request, "customer/order.html", context)
 
 
-@user_passes_test(employee)
+@staff_member_required
 def inventory(request):
     form = IngredientForm(request.POST or None)
     instocks = Ingredients.objects.all()
@@ -85,19 +82,32 @@ def inventory(request):
     return render(request, 'inventory/inventory.html', context)
 
 
-@user_passes_test(employee)
+@staff_member_required
 def suppman(request):
+    form = RestockForm(request.POST or None)
     instocks = Ingredients.objects.all()
     ingredients = ItemStockLevels.objects.all()
     template = loader.get_template('inventory/suppman.html')
+    if form.is_valid():
+        ing = ItemStockLevels.objects.get(ingredient_name=form.cleaned_data.get('name'))
+        ing.quantity = ing.quantity + form.cleaned_data.get('quantity')
+        ing.restock_date = datetime.date.today()
+        ing.save()
+        context = {
+            'ingredients': ingredients,
+            'instocks': instocks,
+            'form': form,
+        }
+        return render(request, 'inventory/suppman.html', context)
     context = {
         'ingredients': ingredients,
         'instocks': instocks,
+        'form': form,
     }
     return render(request, 'inventory/suppman.html', context)
 
 
-@user_passes_test(employee)
+@staff_member_required
 def sales(request):
     instocks = Ingredients.objects.all()
     ingredients = ItemStockLevels.objects.all()

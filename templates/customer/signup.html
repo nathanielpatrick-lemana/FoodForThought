@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Sign Up{% endblock %}
 
 {% block stylesheet %}
 body {
   margin: 0;
 }
 
-ul {
+#liststyle {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -57,19 +57,16 @@ li a:hover:not(.active) {
 {%  endblock %}
 
 {% block content %}
-    <ul>
+    <ul id="liststyle">
         <li><h1>Food for Thought</h1></li>
         <li><h2>Frankie's Italian Cuisine</h2></li>
         <li><a href="{% url 'cust_home' %}">Customer Home</a></li>
     </ul>
-    <div style="margin-left:17%;padding:1px 16px;height:1000px;">
-        <h2>Log In</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Log In</button>
-        </form>
-        <a href="{% url 'password_reset' %}">Forgot password?</a>
-        <a href="{% url 'custsignup' %}">Customers, create an account here!</a>
-    </div>
+      <div style="margin-left:17%;padding:1px 16px;height:1000px;">
+      <h2>Sign up</h2>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Sign Up</button>
+      </form>
 {% endblock %}

@@ -69,8 +69,8 @@ li a:hover:not(.active) {
                     </tr>
                         {% for item in items %}
                             <tr>
-                                <td>{{ item.name }}</td>
-                                <td>${{ item.price }}</td>
+                                <td><h3>{{ item.name }}</h3></td>
+                                <td><h3>${{ item.price }}</h3></td>
                                 <td>{{ item.description }}</td>
                                 <td><img src="{{ item.image }}" alt="Food image" style="width:320px; height:214px;"></td>
                             </tr>

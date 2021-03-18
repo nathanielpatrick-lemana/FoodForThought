@@ -51,7 +51,7 @@ li a:hover:not(.active) {
 {% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}
+{% if user.is_authenticated and user.is_staff %}
     <ul>
         <li><h1>Food for Thought</h1></li>
         <li><h2>Frankie's Italian Cuisine</h2></li>
@@ -72,10 +72,11 @@ li a:hover:not(.active) {
 {% else %}
   <ul>
       <li><h1>Food for Thought</h1></li>
+      <li><h2>Frankie's Italian Cuisine</h2></li>
+      <li><a href="{% url 'cust_home' %}">Customer Home</a></li>
   </ul>
   <div style="margin-left:17%;padding:1px 16px;height:1000px;">
-    <p>This is the restaurant management site. Employees, please log in below.</p>
-    <a href="{% url 'login' %}">Employee Log In</a>
+    <meta http-equiv="refresh" content="0; URL={% url "cust_home" %}"/>
   </div>
 {% endif %}
 {% endblock %}

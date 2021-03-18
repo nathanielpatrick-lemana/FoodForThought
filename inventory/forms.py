@@ -9,3 +9,7 @@ class OrderForm(forms.Form):
 class IngredientForm(forms.Form):
     name = forms.CharField(help_text="Ingredient name")
     quantity = forms.IntegerField(help_text="Amount ordered or currently in stock", initial=0)
+
+class RestockForm(forms.Form):
+    name = forms.CharField(help_text="Ingredient name")
+    quantity = forms.IntegerField(help_text="Amount you wish to order", initial=0)
