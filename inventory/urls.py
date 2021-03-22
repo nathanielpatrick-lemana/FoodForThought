@@ -4,5 +4,5 @@ from . import views
 
 urlpatterns = [
     path('', views.inventory, name='inventory'),
-    path('pie-chart-sales/', views.PieSalesChart, name='sales_pie_chart'),
+    path('sales/', views.sales, name='sales_by_product'),
 ]

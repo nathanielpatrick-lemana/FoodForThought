@@ -13,6 +13,7 @@ from .forms import RestockForm
 import random
 from django.forms import formset_factory
 from django.http import JsonResponse
+import datetime
 
 
 # Create your views here.
@@ -110,21 +111,18 @@ def suppman(request):
 
 @staff_member_required
 def sales(request):
-    instocks = Ingredients.objects.all()
-    ingredients = ItemStockLevels.objects.all()
+    labels = []
+    data = []
+
     template = loader.get_template('inventory/sales.html')
-    context = {
-        'ingredients': ingredients,
-        'instocks': instocks,
-    }
-    return render(request, 'inventory/sales.html', context)
 
+    qs = CustomerOrders.objects.all()
 
-def PieSalesChart(request):
+    for customer_order in qs:
+        labels.append(customer_order.menu_item_id)
+        data.append(customer_order.quantity)
 
-    template = 'templates/inventory/sales.html'
-
-    return render(request, template)
-
-
-
+    return render(request, 'inventory/sales.html', {
+        'labels': labels,
+        'data': data,
+    })
