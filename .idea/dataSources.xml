@@ -10,5 +10,12 @@
       <jdbc-url>jdbc:mysql://fft204.chkn7rtufeos.us-east-2.rds.amazonaws.com:3306/django_cs204</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="food_for_thought_cs_204" uuid="8263ab94-4d3f-4176-ab9a-f7f6ae7816e3">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://fft204.chkn7rtufeos.us-east-2.rds.amazonaws.com:3306/django_cs204</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

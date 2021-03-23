@@ -63,6 +63,61 @@ li a:hover:not(.active) {
     </ul>
     <div style="margin-left:17%;padding:1px 16px;height:1000px;">
     <h1>Inventory</h1>
+    <div class="col-md-10 col-12 mx-auto" >
+            <div class="row">
+                <div class="col-md-6 col-12">
+                    <div class="card" style="width:500px;height:500px;margin-top:30px;">
+                        <div class="body">
+                            <canvas id="sales-by-product" width="450" height="450">
+                            </canvas>
+                            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+                            <script>
+                                const ctx = document.getElementById('sales-by-product').getContext('2d');
+                                const sales_by_product_chart = new Chart(ctx, {
+                                    // The type of chart we want to create
+                                    type: 'line',
+
+                                    // The data for our dataset
+                                    data: {
+                                        labels: ['Cheese Pizza', 'Meat Lovers', 'Eggplant Parm', 'Chicken Parm', 'Meatball Parm', 'Eggplant Parm Calzone', 'Chicken Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Chicken Salad', 'Cobb Salad'],
+                                        datasets: [{
+                                            label: 'Inventory level',
+                                            backgroundColor: [
+                                                'rgb(255, 99, 132)',
+                                                'rgb(56, 209, 230)',
+                                                'rgb(251, 250, 3)',
+                                                'rgb(125, 60, 152)',
+                                                'rgb(53, 251, 3)',
+                                                'rgb(3, 21, 251)',
+                                                'rgb(175, 96, 26)',
+                                                'rgb(52, 73, 94)',
+                                                'rgb(233, 5, 225)',
+                                                'rgb(253, 4, 38)',
+                                            ],
+                                            borderColor: [
+                                              'rgb(255, 99, 132)',
+                                                'rgb(56, 209, 230)',
+                                                'rgb(251, 250, 3)',
+                                                'rgb(125, 60, 152)',
+                                                'rgb(53, 251, 3)',
+                                                'rgb(3, 21, 251)',
+                                                'rgb(175, 96, 26)',
+                                                'rgb(52, 73, 94)',
+                                                'rgb(233, 5, 225)',
+                                                'rgb(253, 4, 38)',
+                                            ],
+                                            data: [1000, 835, 750, 500, 120, 50, 245, 415, 235, 120]
+                                        }]
+                                    },
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <br>
+    <br>
         {% if ingredients and instocks %}
             <table style="width:100%">
             <tr>

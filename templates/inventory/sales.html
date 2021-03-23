@@ -73,12 +73,48 @@ li a:hover:not(.active) {
                 <div class="col-md-6 col-12">
                     <div class="card" style="width:500px;height:500px;margin-top:30px;">
                         <div class="body">
-                            <div id="container" style="width: 90%; height: 75%;"></div>
                             <canvas id="sales-by-product" width="450" height="450">
                             </canvas>
                             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
                             <script>
+                                const ctx = document.getElementById('sales-by-product').getContext('2d');
+                                const sales_by_product_chart = new Chart(ctx, {
+                                    // The type of chart we want to create
+                                    type: 'pie',
 
+                                    // The data for our dataset
+                                    data: {
+                                        labels: ['Cheese Pizza', 'Meat Lovers', 'Eggplant Parm', 'Chicken Parm', 'Meatball Parm', 'Eggplant Parm Calzone', 'Chicken Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Chicken Salad', 'Cobb Salad'],
+                                        datasets: [{
+                                            label: 'Sales by Product',
+                                            backgroundColor: [
+                                                'rgb(255, 99, 132)',
+                                                'rgb(56, 209, 230)',
+                                                'rgb(251, 250, 3)',
+                                                'rgb(125, 60, 152)',
+                                                'rgb(53, 251, 3)',
+                                                'rgb(3, 21, 251)',
+                                                'rgb(175, 96, 26)',
+                                                'rgb(52, 73, 94)',
+                                                'rgb(233, 5, 225)',
+                                                'rgb(253, 4, 38)',
+                                            ],
+                                            borderColor: [
+                                              'rgb(255, 99, 132)',
+                                                'rgb(56, 209, 230)',
+                                                'rgb(251, 250, 3)',
+                                                'rgb(125, 60, 152)',
+                                                'rgb(53, 251, 3)',
+                                                'rgb(3, 21, 251)',
+                                                'rgb(175, 96, 26)',
+                                                'rgb(52, 73, 94)',
+                                                'rgb(233, 5, 225)',
+                                                'rgb(253, 4, 38)',
+                                            ],
+                                            data: [500, 333, 250, 325, 120, 330, 245, 415, 235, 120]
+                                        }]
+                                    },
+                                });
                             </script>
                         </div>
                     </div>
@@ -89,24 +125,22 @@ li a:hover:not(.active) {
                             <canvas id="avg-daily-sales" width="450" height="450"></canvas>
                             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
                             <script>
-                                    const ctx = document.getElementById('avg-daily-sales').getContext('2d');
-                                    const chart = new Chart(ctx, {
-                                      // The type of chart we want to create
-                                      type: 'bar',
-
+                                const daily_ctx = document.getElementById('avg-daily-sales').getContext('2d');
+                                const average_daily_sales = new Chart(daily_ctx, {
+                                    // The type of chart we want to create
+                                    type: 'bar',
                                       // The data for our dataset
-                                      data: {
+                                    data: {
                                         labels: ['Cheese Pizza', 'Meat Lovers', 'Eggplant Parm', 'Chicken Parm', 'Meatball Parm', 'Eggplant Parm Calzone', 'Chicken Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Chicken Salad', 'Cobb Salad'],
                                         datasets: [{
-                                          label: 'Average Daily Sales',
-                                          backgroundColor: 'rgb(255, 99, 132)',
-                                          borderColor: 'rgb(255, 99, 132)',
-                                          //CHANGE DATA TO REFLECT AVERAGE DAILY SALES
-                                          data: [35, 24, 18, 23, 9, 23, 17, 29, 16, 8]
+                                            label: 'Average Daily Sales',
+                                            backgroundColor: 'rgb(56, 209, 230)',
+                                            borderColor: 'rgb(56, 209, 230)',
+                                            //CHANGE DATA TO REFLECT AVERAGE DAILY SALES
+                                            data: [35, 24, 18, 23, 9, 23, 17, 29, 16, 8]
                                         }]
-                                      },
-                                      });
-                                    };
+                                    },
+                                });
                             </script>
                         </div>
                     </div>
@@ -117,8 +151,8 @@ li a:hover:not(.active) {
                             <canvas id="avg-weekly-sales" width="450" height="450"></canvas>
                             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
                             <script>
-                                    const ctx = document.getElementById('avg-daily-sales').getContext('2d');
-                                    const chart = new Chart(ctx, {
+                                    const weekly_ctx = document.getElementById('avg-weekly-sales').getContext('2d');
+                                    const weekly_chart = new Chart(weekly_ctx, {
                                       // The type of chart we want to create
                                       type: 'bar',
 
@@ -134,7 +168,7 @@ li a:hover:not(.active) {
                                         }]
                                       },
                                       });
-                                    };
+
                             </script>
                         </div>
                     </div>
@@ -145,8 +179,8 @@ li a:hover:not(.active) {
                             <canvas id="revenue-report" width="450" height="450"></canvas>
                             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
                             <script>
-                                    const ctx = document.getElementById('avg-daily-sales').getContext('2d');
-                                    const chart = new Chart(ctx, {
+                                    const rev_ctx = document.getElementById('revenue-report').getContext('2d');
+                                    const rev_chart = new Chart(rev_ctx, {
                                       // The type of chart we want to create
                                       type: 'bar',
 
@@ -155,14 +189,13 @@ li a:hover:not(.active) {
                                         labels: ['Cheese Pizza', 'Meat Lovers', 'Eggplant Parm', 'Chicken Parm', 'Meatball Parm', 'Eggplant Parm Calzone', 'Chicken Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Chicken Salad', 'Cobb Salad'],
                                         datasets: [{
                                           label: 'Total Revenue',
-                                          backgroundColor: 'rgb(255, 99, 132)',
-                                          borderColor: 'rgb(255, 99, 132)',
+                                          backgroundColor: 'rgb(0, 236, 63)',
+                                          borderColor: 'rgb(0, 236, 63)',
                                           //CHANGE DATA TO REFLECT AVERAGE DAILY SALES
-                                          data: [5495, 4325.67, 2997.70, 23, 9, 23, 17, 29, 16, 8]
+                                          data: [5495, 4325.67, 2997.70, 3246.75, 1438, 3626.7, 3427.50, 5805.85, 2112.65, 1198.8]
                                         }]
                                       },
-                                      });
-                                    };
+                                    });
                             </script>
                         </div>
                     </div>
