@@ -80,7 +80,7 @@ li a:hover:not(.active) {
                                 const ctx = document.getElementById('sales-by-product').getContext('2d');
                                 const sales_by_product_chart = new Chart(ctx, {
                                     // The type of chart we want to create
-                                    type: 'pie',
+                                    type: 'doughnut',
 
                                     // The data for our dataset
                                     data: {
@@ -88,32 +88,27 @@ li a:hover:not(.active) {
                                         datasets: [{
                                             label: 'Sales by Product',
                                             backgroundColor: [
-                                                'rgb(255, 99, 132)',
-                                                'rgb(56, 209, 230)',
-                                                'rgb(251, 250, 3)',
-                                                'rgb(125, 60, 152)',
-                                                'rgb(53, 251, 3)',
-                                                'rgb(3, 21, 251)',
-                                                'rgb(175, 96, 26)',
-                                                'rgb(52, 73, 94)',
-                                                'rgb(233, 5, 225)',
-                                                'rgb(253, 4, 38)',
+                                                '#edf5ff',
+                                                '#d0e2ff',
+                                                '#a6c8ff',
+                                                '#78a9ff',
+                                                '#4589ff',
+                                                '#0f62fe',
+                                                '#0043ce',
+                                                '#002d9c',
+                                                '#001d6c',
+                                                '#001141',
                                             ],
-                                            borderColor: [
-                                              'rgb(255, 99, 132)',
-                                                'rgb(56, 209, 230)',
-                                                'rgb(251, 250, 3)',
-                                                'rgb(125, 60, 152)',
-                                                'rgb(53, 251, 3)',
-                                                'rgb(3, 21, 251)',
-                                                'rgb(175, 96, 26)',
-                                                'rgb(52, 73, 94)',
-                                                'rgb(233, 5, 225)',
-                                                'rgb(253, 4, 38)',
-                                            ],
+
                                             data: [500, 333, 250, 325, 120, 330, 245, 415, 235, 120]
                                         }]
                                     },
+                                    options: {
+                                        title: {
+                                          display: true,
+                                          text: 'Total Sales per Product'
+                                        }
+                                    }
                                 });
                             </script>
                         </div>
@@ -134,8 +129,8 @@ li a:hover:not(.active) {
                                         labels: ['Cheese Pizza', 'Meat Lovers', 'Eggplant Parm', 'Chicken Parm', 'Meatball Parm', 'Eggplant Parm Calzone', 'Chicken Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Chicken Salad', 'Cobb Salad'],
                                         datasets: [{
                                             label: 'Average Daily Sales',
-                                            backgroundColor: 'rgb(56, 209, 230)',
-                                            borderColor: 'rgb(56, 209, 230)',
+                                            backgroundColor: '#6929c4',
+                                            borderColor: '#6929c4',
                                             //CHANGE DATA TO REFLECT AVERAGE DAILY SALES
                                             data: [35, 24, 18, 23, 9, 23, 17, 29, 16, 8]
                                         }]
@@ -161,8 +156,8 @@ li a:hover:not(.active) {
                                         labels: ['Cheese Pizza', 'Meat Lovers', 'Eggplant Parm', 'Chicken Parm', 'Meatball Parm', 'Eggplant Parm Calzone', 'Chicken Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Chicken Salad', 'Cobb Salad'],
                                         datasets: [{
                                           label: 'Avg Weekly Sales',
-                                          backgroundColor: 'rgb(255, 99, 132)',
-                                          borderColor: 'rgb(255, 99, 132)',
+                                          backgroundColor: '#fa4d56',
+                                          borderColor: '#fa4d56',
 
                                           data: [245, 168, 126, 161, 63, 161, 119, 203, 112, 56]
                                         }]
@@ -189,8 +184,8 @@ li a:hover:not(.active) {
                                         labels: ['Cheese Pizza', 'Meat Lovers', 'Eggplant Parm', 'Chicken Parm', 'Meatball Parm', 'Eggplant Parm Calzone', 'Chicken Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Chicken Salad', 'Cobb Salad'],
                                         datasets: [{
                                           label: 'Total Revenue',
-                                          backgroundColor: 'rgb(0, 236, 63)',
-                                          borderColor: 'rgb(0, 236, 63)',
+                                          backgroundColor: '#005d5d',
+                                          borderColor: '#005d5d',
                                           //CHANGE DATA TO REFLECT AVERAGE DAILY SALES
                                           data: [5495, 4325.67, 2997.70, 3246.75, 1438, 3626.7, 3427.50, 5805.85, 2112.65, 1198.8]
                                         }]
