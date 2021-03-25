@@ -59,16 +59,16 @@ li a:hover:not(.active) {
         <li><a href="{% url 'inventory' %}">Inventory</a></li>
         <li><a href="{% url 'suppman' %}">Supply Management</a></li>
         <li><a href="{% url 'sales' %}">Sales</a></li>
-        <li><a href="{% url 'home' %}">Recipes</a></li>
+        <li><a href="{% url 'activeorders' %}">Active Orders</a></li>
     </ul>
     <div style="margin-left:17%;padding:1px 16px;height:1000px;">
     <h1>Inventory</h1>
     <div class="col-md-10 col-12 mx-auto" >
             <div class="row">
                 <div class="col-md-6 col-12">
-                    <div class="card" style="width:500px;height:500px;margin-top:30px;">
+                    <div class="card" style="width:1000px;height:500px;margin-top:30px;">
                         <div class="body">
-                            <canvas id="sales-by-product" width="450" height="450">
+                            <canvas id="sales-by-product" width="450" height="227">
                             </canvas>
                             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
                             <script>

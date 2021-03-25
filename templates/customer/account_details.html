@@ -59,7 +59,30 @@ li a:hover:not(.active) {
             <li><h4>Powered by Food for Thought</h4></li>
         </ul>
         <div style="margin-left:17%;padding:1px 16px;height:1000px;">
-            <h1>Thank you {{  user.username }}! Your order has been confirmed.</h1>
-            <h2>Your order number is {{ new_id }}. Please take note of this order number when you arrive at the restaurant. A confirmation email has been sent to {{ user.email }}.</h2>
+            <h1>Your Account Details</h1>
+            {% if user.is_authenticated %}
+                <h2>Logged in as {{  user.username }}. Not {{ user.username }}? <a href="{% url 'logout' %}">Log out</a></h2>
+                <h2>Your Previous Orders</h2>
+                <table style="width: 100%">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Order Date</th>
+                        <th>Order Status</th>
+                    </tr>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{ order.order }}</td>
+                        <td>{{ order.order_date }}</td>
+                        {% if order.complete == 0 %}
+                            <td>In progress</td>
+                        {% else %}
+                            <td>Completed</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </table>
+            {% else %}
+                <meta http-equiv="refresh" content="0; URL={% url "login" %}"/>
+            {% endif %}
         </div>
 {% endblock %}

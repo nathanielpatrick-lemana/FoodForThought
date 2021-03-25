@@ -6,6 +6,8 @@ from .models import User
 
 
 class CustomerAcctForm(UserCreationForm):
+    email = forms.EmailField(required=True, label='Email address')
+
     class Meta(UserCreationForm.Meta):
         model = User
 
@@ -13,5 +15,6 @@ class CustomerAcctForm(UserCreationForm):
     def save(self):
         user = super().save(commit=False)
         user.is_customer = True
+        user.email = self.cleaned_data["email"]
         user.save()
         return user

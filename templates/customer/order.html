@@ -60,6 +60,11 @@ li a:hover:not(.active) {
         </ul>
         <div style="margin-left:17%;padding:1px 16px;height:1000px;">
             <h1>Order from Frankie's Italian Cuisine!</h1>
+            {% if user.is_authenticated %}
+                <h2>Logged in as {{  user.username }}. Not {{ user.username }}? <a href="{% url 'logout' %}">Log out</a></h2>
+            {% else %}
+                <meta http-equiv="refresh" content="0; URL={% url "login" %}"/>
+            {% endif %}
         <form action="" method="post" enctype="multipart/form-data"><table style="width:100%">
         {% csrf_token %}
                     <tr>

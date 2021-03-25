@@ -63,6 +63,7 @@ li a:hover:not(.active) {
             <li><a href={% url "cust_home" %}>Home</a></li>
             <li><a href={% url "menu" %}>Menu</a></li>
             <li><a href="{% url "order" %}">Order</a></li>
+            <li><a href={% url "custdetail" %}>Account</li>
             <li><b href=null></b></li>
             {% if user.is_authenticated %}
                         <li><a href="{% url "logout" %}">Log Out</a></li>
@@ -74,7 +75,7 @@ li a:hover:not(.active) {
         </ul>
         <div style="margin-left:17%;padding:1px 16px;height:1000px;background-image: url(https://cdn.discordapp.com/attachments/798661624181293086/820825114051870740/restaurant_interior.jpg);">
             <h1>Welcome to Frankie's Italian Cuisine!</h1>
-            <h2>At Frankie's, we have a history dating back over 100 years of culinary excellence. Founded in 1903 in Derry, New Hampshire by first-generation immigrant Frank Fillocini, we have become southern New Hampshire's best Italian establishment. We hope we deliver the phenomenal dining experience we strive to give you!</h2>
+            <h2>At Frankie's, we have a history dating back over 100 years of culinary excellence. Founded in 1903 in Derry, New Hampshire by first-generation immigrant Frank Filloccini, we have become southern New Hampshire's best Italian establishment. We hope we deliver the phenomenal dining experience we strive to give you!</h2>
             {% if user.is_authenticated %}
                 <h3>Welcome, {{ user.username }}! <a href="{% url "order" %}">Order now!</a></h3>
             {% else %}

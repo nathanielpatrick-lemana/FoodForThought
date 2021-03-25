@@ -34,6 +34,9 @@ class RecipeItem(models.Model):
 class Orders(models.Model):
     order = models.IntegerField(primary_key=True)
     order_date = models.DateField()
+    custname = models.CharField(max_length=150)
+    custid = models.IntegerField()
+    complete = models.BooleanField()
 
     def __str__(self):
         return 'order id: {}'.format(self.order)

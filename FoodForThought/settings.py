@@ -125,13 +125,12 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/management/home'
 LOGOUT_REDIRECT_URL = '/management/accounts/login'
 
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = 'sent_emails'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-#SERVER_EMAIL = 'frankiesitaliancuisine.fft@outlook.com'
-#EMAIL_HOST = 'smtp.office365.com'
-#EMAIL_PORT = 587
-EMAIL_HOST_USER = 'frankiesitaliancuisine.fft@outlook.com'
+SERVER_EMAIL = 'frankiesitaliancuisine.fft@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'frankiesitaliancuisine.fft@gmail.com'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-#EMAIl_HOST_PASSWORD = 'mfwckgviftfxssqy'
-#EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = 'pahswhard'
+EMAIL_USE_TLS = True
