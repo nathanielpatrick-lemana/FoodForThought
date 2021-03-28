@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.template import loader
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
+from django.db import connection
 from .models import Item
 from .models import Ingredients
 from .models import ItemStockLevels
@@ -112,7 +113,7 @@ def activeorder(request):
     user = get_user_model()
     template = loader.get_template('inventory/active_orders.html')
     if form.is_valid():
-        sendorder=form.cleaned_data.get('orderid')
+        sendorder = form.cleaned_data.get('orderid')
         orderupd = Orders.objects.get(order=sendorder)
         orderupd.complete = True
         orderupd.save()
@@ -120,7 +121,8 @@ def activeorder(request):
         useremail = user.objects.get(id=Orders.objects.get(order=sendorder).custid).email
 
         send_mail('Order number ' + str(sendorder) + ' at Frankie\'s Italian Cuisine is ready for pickup!',
-                  'Your order with order number ' + str(sendorder) + ' at Frankie\'s Italian Cuisine is now ready for pickup.',
+                  'Your order with order number ' + str(
+                      sendorder) + ' at Frankie\'s Italian Cuisine is now ready for pickup.',
                   None,
                   [useremail],
                   )
@@ -179,3 +181,13 @@ def sales(request):
         'labels': labels,
         'data': data,
     })
+
+
+# add in charts for daily, weekly and monthly revenue
+# charts: Sales by product doughnut chart, avg daily sale, avg weekly sales, avg daily revenue, avg monthly revenue
+def doughnut_chart(request):
+    labels=[] #high level menu items
+    data=[] #sum(quantity) based for high level menu items
+
+    menu_items = Item.objects.all()
+    sales =
