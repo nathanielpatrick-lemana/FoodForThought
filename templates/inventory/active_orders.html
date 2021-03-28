@@ -64,19 +64,28 @@ li a:hover:not(.active) {
     <div style="margin-left:17%;padding:1px 16px;height:1000px;">
     <h1>Active Orders</h1>
         {% if orders %}
-            <table style="width:100%">
+        {% for order in orders %}
+            <table style="width:30%">
             <tr>
                 <th>Order ID</th>
                 <th>Customer Name</th>
             </tr>
-            {% for order in orders %}
             <tr>
                 <td> {{ order.order }}</td>
                 <td>{{ order.custname }}</td>
             </tr>
+            <tr>
+            <th>Items</th>
+            </tr>
+             {% for item in order.customerorders_set.all %}
+                <tr>
+                    <td>{{ item.menu_item_id.name }}</td>
+                 <td>{{ item.quantity }}</td>
+                </tr>
+                 {% endfor %}
             {% endfor %}
             </table>
-            <h2>Push an order as confirmed</h2>
+            <h2>Push an order as completed</h2>
             <form action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.management_form }}

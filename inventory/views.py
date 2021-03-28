@@ -129,11 +129,13 @@ def activeorder(request):
 
         context = {
             'orders': orders,
+            'items': items,
             'form': form,
         }
         return render(request, 'inventory/active_orders.html', context)
     context = {
         'orders': orders,
+        'items': items,
         'form': form,
     }
     return render(request, 'inventory/active_orders.html', context)
@@ -185,9 +187,9 @@ def sales(request):
 
 # add in charts for daily, weekly and monthly revenue
 # charts: Sales by product doughnut chart, avg daily sale, avg weekly sales, avg daily revenue, avg monthly revenue
-def doughnut_chart(request):
-    labels=[] #high level menu items
-    data=[] #sum(quantity) based for high level menu items
-
-    menu_items = Item.objects.all()
-    sales =
+#def doughnut_chart(request):
+#    labels=[] #high level menu items
+#    data=[] #sum(quantity) based for high level menu items
+#
+#    menu_items = Item.objects.all()
+#    sales =

@@ -59,3 +59,9 @@ class ItemStockLevels(models.Model):
 
     def __str__(self):
         return self.ingredient_id
+
+
+class StockHistory(models.Model):
+    ingredient_id = models.OneToOneField(Ingredients, on_delete=models.CASCADE)
+    date = models.DateField(primary_key=True)
+    stocklevel = models.IntegerField()
