@@ -73,45 +73,50 @@ li a:hover:not(.active) {
                 <div class="col-md-6 col-12">
                     <div class="card" style="width:500px;height:500px;margin-top:30px;">
                         <div class="body">
-                            <canvas id="sales-by-product" width="450" height="450">
+                            <canvas id="sales-by-product" width="450" height="450" data-url="{% url 'doughnutChart' %}">
                             </canvas>
                             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
                             <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
                             <script>
-                                $.get('P% url "')
-                                const ctx = document.getElementById('sales-by-product').getContext('2d');
-                                const sales_by_product_chart = new Chart(ctx, {
-                                    // The type of chart we want to create
-                                    type: 'doughnut',
-
-                                    // The data for our dataset
-                                    data: {
-                                        labels: ['Cheese Pizza', 'Meat Lovers', 'Eggplant Parm', 'Chicken Parm', 'Meatball Parm', 'Eggplant Parm Calzone', 'Chicken Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Chicken Salad', 'Cobb Salad'],
-                                        datasets: [{
-                                            label: 'Sales by Product',
-                                            backgroundColor: [
-                                                '#edf5ff',
-                                                '#d0e2ff',
-                                                '#a6c8ff',
-                                                '#78a9ff',
-                                                '#4589ff',
-                                                '#0f62fe',
-                                                '#0043ce',
-                                                '#002d9c',
-                                                '#001d6c',
-                                                '#001141',
-                                            ],
-
-                                            data: [500, 333, 250, 325, 120, 330, 245, 415, 235, 120]
-                                        }]
-                                    },
-                                    options: {
-                                        title: {
-                                          display: true,
-                                          text: 'Total Sales per Product'
+                                $(function () {
+                                    let $doughnutChart = $("#sales-by-product");
+                                    $.ajax({
+                                        url: $doughnutChart.data("url"),
+                                        success: function (data) {
+                                            const ctx = $doughnutChart[0].getContext("2d");
+                                            new Chart(ctx, {
+                                                type: "doughnut",
+                                                data: {
+                                                    labels: data.labels,
+                                                    datasets: [{
+                                                        label: 'Sales by Product',
+                                                        backgroundColor: [
+                                                            '#edf5ff',
+                                                            '#d0e2ff',
+                                                            '#a6c8ff',
+                                                            '#78a9ff',
+                                                            '#4589ff',
+                                                            '#0f62fe',
+                                                            '#0043ce',
+                                                            '#002d9c',
+                                                            '#001d6c',
+                                                            '#001141',
+                                                        ],
+                                                        data: data.data
+                                                    }]
+                                                },
+                                                options: {
+                                                    title: {
+                                                      display: true,
+                                                      text: 'Total Sales per Product'
+                                                    }
+                                                }
+                                            })
                                         }
-                                    }
-                                });
+
+                                    })
+                                })
+
                             </script>
                         </div>
                     </div>
