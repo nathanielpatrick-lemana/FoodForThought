@@ -67,3 +67,10 @@ class StockHistory(models.Model):
     ingredient_id = models.OneToOneField(Ingredients, on_delete=models.CASCADE)
     date = models.DateField(primary_key=True)
     stocklevel = models.IntegerField()
+
+
+#class PaymentCards(models.Model):
+ #   cardholder = models.CharField(max_length=50)
+  #  cardnumber = models.CharField(max_length=19)
+   # cardexpiry = models.CharField(max_length=5)
+    #cardverifi = models.CharField(max_length=4)
