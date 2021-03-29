@@ -163,8 +163,8 @@ li a:hover:not(.active) {
                                         labels: ['Cheese Pizza', 'Meat Lovers', 'Eggplant Parm', 'Chicken Parm', 'Meatball Parm', 'Eggplant Parm Calzone', 'Chicken Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Chicken Salad', 'Cobb Salad'],
                                         datasets: [{
                                           label: 'Avg Weekly Sales',
-                                          backgroundColor: '#fa4d56',
-                                          borderColor: '#fa4d56',
+                                          backgroundColor: '#009d9a',
+                                          borderColor: '#009d9a',
 
                                           data: [245, 168, 126, 161, 63, 161, 119, 203, 112, 56]
                                         }]
@@ -191,10 +191,64 @@ li a:hover:not(.active) {
                                         labels: ['Cheese Pizza', 'Meat Lovers', 'Eggplant Parm', 'Chicken Parm', 'Meatball Parm', 'Eggplant Parm Calzone', 'Chicken Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Chicken Salad', 'Cobb Salad'],
                                         datasets: [{
                                           label: 'Total Revenue',
-                                          backgroundColor: '#005d5d',
-                                          borderColor: '#005d5d',
+                                          backgroundColor: '#a56eff',
+                                          borderColor: '#a56eff',
                                           //CHANGE DATA TO REFLECT AVERAGE DAILY SALES
                                           data: [5495, 4325.67, 2997.70, 3246.75, 1438, 3626.7, 3427.50, 5805.85, 2112.65, 1198.8]
+                                        }]
+                                      },
+                                    });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="card" style="width:500px;height:500px;margin-top:30px;">
+                        <div class="body">
+                            <canvas id="daily-revenue" width="450" height="450"></canvas>
+                            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+                            <script>
+                                    const drev_ctx = document.getElementById('daily-revenue').getContext('2d');
+                                    const drev_chart = new Chart(drev_ctx, {
+                                      // The type of chart we want to create
+                                      type: 'bar',
+
+                                      // The data for our dataset
+                                      data: {
+                                        labels: ['Cheese Pizza', 'Meat Lovers', 'Eggplant Parm', 'Chicken Parm', 'Meatball Parm', 'Eggplant Parm Calzone', 'Chicken Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Chicken Salad', 'Cobb Salad'],
+                                        datasets: [{
+                                          label: 'Daily Revenue',
+                                          backgroundColor: '#9f1853',
+                                          borderColor: '#9f1853',
+                                          //CHANGE DATA TO REFLECT AVERAGE DAILY SALES
+                                          data: [200, 135, 70, 25, 13, 55, 32, 175, 1, 11]
+                                        }]
+                                      },
+                                    });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="card" style="width:500px;height:500px;margin-top:30px;">
+                        <div class="body">
+                            <canvas id="weekly-revenue" width="450" height="450"></canvas>
+                            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+                            <script>
+                                    const wrev_ctx = document.getElementById('weekly-revenue').getContext('2d');
+                                    const wrev_chart = new Chart(wrev_ctx, {
+                                      // The type of chart we want to create
+                                      type: 'bar',
+
+                                      // The data for our dataset
+                                      data: {
+                                        labels: ['Cheese Pizza', 'Meat Lovers', 'Eggplant Parm', 'Chicken Parm', 'Meatball Parm', 'Eggplant Parm Calzone', 'Chicken Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Chicken Salad', 'Cobb Salad'],
+                                        datasets: [{
+                                          label: 'Weekly Revenue',
+                                          backgroundColor: '#198038',
+                                          borderColor: '#198038',
+                                          //CHANGE DATA TO REFLECT AVERAGE DAILY SALES
+                                          data: [1300, 910, 490, 175, 191, 385, 220, 1100, 150, 77]
                                         }]
                                       },
                                     });
