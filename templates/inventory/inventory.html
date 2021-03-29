@@ -126,14 +126,12 @@ li a:hover:not(.active) {
         {% if ingredients and instocks %}
             <table style="width:100%">
             <tr>
-                <th>ID</th>
                 <th>Item</th>
                 <th>Quantity (in units)</th>
                 <th>Last Restock Date</th>
             </tr>
                 {% for ingredients in ingredients %}
                     <tr>
-                        <td>{{ ingredients.id }}</td>
                         <td>{{ ingredients.ingredient_name }}</td>
                         <td>{{ ingredients.quantity }}</td>
                         <td>{{ ingredients.restock_date }}</td>

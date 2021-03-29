@@ -18,3 +18,9 @@ class CustomerAcctForm(UserCreationForm):
         user.email = self.cleaned_data["email"]
         user.save()
         return user
+
+
+class AcctDetUpdateForm(forms.Form):
+    first_name = forms.CharField(max_length=50)
+    last_name = forms.CharField(max_length=50)
+    email_addr = forms.EmailField(max_length=50)
