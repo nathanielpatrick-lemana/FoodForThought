@@ -47,7 +47,28 @@ li a.active {
 li a:hover:not(.active) {
   background-color: maroon;
   color: white;
+  }
+
+#popup-1 {
+	display: none;
+	background-color: rgba(255,0,0,1);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
+
+.popup-content {
+	position: relative;
+	padding: 20px;
+	margin: 0 auto;
+	background-color: white;
+    border: 1px solid black;
+	width: 400px;
+	top: 5vh;
+}
+
 {% endblock %}
 
 {% block content %}
@@ -62,8 +83,25 @@ li a:hover:not(.active) {
             <h1>Your Account Details</h1>
             {% if user.is_authenticated %}
                 <h2>Logged in as {{  user.username }}. Not {{ user.username }}? <a href="{% url 'logout' %}">Log out</a></h2>
-                <h2>Your Previous Orders</h2>
-                <table style="width: 100%">
+                <h3>Account</h3>
+                    <table style="width: 50%">
+                        <tr>
+                            <th>Username</th>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Email address</th>
+                        </tr>
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.first_name }}</td>
+                            <td>{{ user.last_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td><button id="showpopup">Update info</button></td>
+                        </tr>
+                    </table>
+                <a href="{% url 'password_reset' %}">Change password</a>
+                <h3>Your Previous Orders</h3>
+                <table style="width: 50%">
                     <tr>
                         <th>Order ID</th>
                         <th>Order Date</th>
@@ -81,8 +119,33 @@ li a:hover:not(.active) {
                     </tr>
                 {% endfor %}
                 </table>
+                    <div id="popup-1">
+                        <div class="popup-content">
+                            <h2>Update info</h2>
+                             <form action="" method="post" enctype="multipart/form-data"><form style="width:100%">
+                                 {% csrf_token %}
+                                 {{ form.management_form }}
+                                <p>{{ form.as_p }}</p>
+                                <button id="close-popup-1">Close</button>
+                                <input type="submit" value="Update info">
+                             </form>
+                        </div>
+                    </div>
+                </div>
             {% else %}
                 <meta http-equiv="refresh" content="0; URL={% url "login" %}"/>
             {% endif %}
-        </div>
+    <script>
+        const popup1 = document.getElementById("popup-1");
+        const openPopup1 = document.getElementById("showpopup");
+        const closePopup1 = document.getElementById('close-popup-1');
+
+        showpopup.addEventListener('click', () => {
+            popup1.style.display = "block";
+        })
+
+        closePopup1.addEventListener('click', () => {
+            popup1.style.display = "none";
+        })
+    </script>
 {% endblock %}

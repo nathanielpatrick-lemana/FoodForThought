@@ -14,6 +14,7 @@ from .forms import IngredientForm
 from .forms import RestockForm
 from .forms import PushOrder
 from .forms import CardForm
+from account.forms import AcctDetUpdateForm
 import random
 from django.forms import formset_factory
 from django.core.mail import send_mail
@@ -75,8 +76,18 @@ def order(request):
 def acctdet(request):
     custid = request.user.id
     orders = Orders.objects.all().filter(custid=custid)
+    updateform = AcctDetUpdateForm(request.POST or None)
+    if updateform.is_valid():
+        newinfo = get_user_model().objects.all().filter(id=custid)
+        newinfo.update(first_name=updateform.cleaned_data.get('first_name'), last_name=updateform.cleaned_data.get('last_name'), email=updateform.cleaned_data.get('email_addr'))
+        context = {
+            'orders': orders,
+            'form': updateform,
+        }
+        return render(request, "customer/account_details.html", context)
     context = {
         'orders': orders,
+        'form': updateform,
     }
     return render(request, "customer/account_details.html", context)
 
