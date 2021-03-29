@@ -190,9 +190,37 @@ def sales(request):
 
 # add in charts for daily, weekly and monthly revenue
 # charts: Sales by product doughnut chart, avg daily sale, avg weekly sales, avg daily revenue, avg monthly revenue
-#def doughnut_chart(request):
-#    labels=[] #high level menu items
-#    data=[] #sum(quantity) based for high level menu items
-#
-#    menu_items = Item.objects.all()
-#    sales =
+def doughnut_chart(request):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT inventory_item.name, SUM(inventory_customerorders.quantity) FROM inventory_item, inventory_customerorders, inventory_orders WHERE inventory_customerorders.id = inventory_orders.order AND inventory_customerorders.menu_item_id_id = inventory_item.id GROUP BY inventory_item.name")
+        menu_items = [item[0] for item in cursor.fetchall()]
+        cursor.execute(
+            "SELECT inventory_item.name, SUM(inventory_customerorders.quantity) FROM inventory_item, inventory_customerorders, inventory_orders WHERE inventory_customerorders.id = inventory_orders.order AND inventory_customerorders.menu_item_id_id = inventory_item.id GROUP BY inventory_item.name")
+        sales_totals = [item[1] for item in cursor.fetchall()]
+    return JsonResponse(data={
+        'labels': menu_items,
+        'data': sales_totals,
+    })
+
+
+def average_daily_sales(request):
+    yur = []
+
+
+def aggregated_order(request, order):
+    # this function will return the aggregated amounts of an order
+    with connection.cursor() as cursor:
+        cursor.execute(
+            ""
+        )
+
+
+def aggregated_date(request, date):
+    # this function will return the aggregated amount of leaf element items
+    yp = []
+
+
+def consumption(request, curr_date):
+    # this function should be run every date to update the current inventory levels
+    yp = []
