@@ -13,6 +13,7 @@ from .forms import OrderForm
 from .forms import IngredientForm
 from .forms import RestockForm
 from .forms import PushOrder
+from .forms import CardForm
 import random
 from django.forms import formset_factory
 from django.core.mail import send_mail
@@ -38,11 +39,12 @@ def order(request):
     # creating a formset
     OrderFormSet = formset_factory(OrderForm, extra=10)
     formset = OrderFormSet(request.POST or None, initial=0)
+    cardform = CardForm(request.POST or None)
 
-    if formset.is_valid():
+    if formset.is_valid() and cardform.is_valid():
         new_id = random.randint(1000, 9999)
         counter = 1
-        neworder = Orders(new_id, datetime.date.today(), request.user.username, request.user.id, False)
+        neworder = Orders(new_id, datetime.date.today(), request.user.username, request.user.id, False, True, 0.00)
         neworder.save()
         for form in formset:
             quantity = form.cleaned_data.get('item_quantity', 0)
@@ -65,6 +67,7 @@ def order(request):
     context = {
         'items': items,
         'formset': formset,
+        'cardform': cardform,
     }
     return render(request, "customer/order.html", context)
 

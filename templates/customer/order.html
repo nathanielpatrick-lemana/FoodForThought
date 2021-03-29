@@ -4,7 +4,9 @@
 
 {% block stylesheet %}
 body {
-  margin: 0;
+    margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 ul {
@@ -47,7 +49,28 @@ li a.active {
 li a:hover:not(.active) {
   background-color: maroon;
   color: white;
+  }
+
+#popup-1 {
+	display: none;
+	background-color: rgba(0,0,0,1);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
+
+.popup-content {
+	position: relative;
+	padding: 20px;
+	margin: 0 auto;
+	background-color: white;
+
+	width: 400px;
+	top: 5vh;
+}
+
 {% endblock %}
 
 {% block content %}
@@ -84,7 +107,30 @@ li a:hover:not(.active) {
                             <td>{{ formset.as_table }}</td>
                         {% endfor %}
                     </table>
-                <input type="submit" value="Order now!">
-        </form>
+            <div id="popup-1">
+                <div class="popup-content">
+                    <h2>Payment</h2>
+                        {{ cardform.management_form }}
+                        <p>{{ cardform.as_p }}</p>
+                        <button id="close-popup-1">Close</button>
+                        <input type="submit" value="Pay now">
+                </div>
+            </div>
+            </form>
+            <button id="showpopup">Pay for order</button>
         </div>
+
+    <script>
+        const popup1 = document.getElementById("popup-1");
+        const openPopup1 = document.getElementById("showpopup");
+        const closePopup1 = document.getElementById('close-popup-1');
+
+        showpopup.addEventListener('click', () => {
+            popup1.style.display = "block";
+        })
+
+        closePopup1.addEventListener('click', () => {
+            popup1.style.display = "none";
+        })
+    </script>
 {% endblock %}

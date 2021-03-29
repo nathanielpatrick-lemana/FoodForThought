@@ -37,6 +37,8 @@ class Orders(models.Model):
     custname = models.CharField(max_length=150)
     custid = models.IntegerField()
     complete = models.BooleanField()
+    paid = models.BooleanField()
+    total = models.FloatField()
 
     def __str__(self):
         return 'order id: {}'.format(self.order)

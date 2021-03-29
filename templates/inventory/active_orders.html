@@ -69,10 +69,14 @@ li a:hover:not(.active) {
             <tr>
                 <th>Order ID</th>
                 <th>Customer Name</th>
+                <th>Total before tax</th>
+                <th>Paid for?</th>
             </tr>
             <tr>
-                <td> {{ order.order }}</td>
+                <td>{{ order.order }}</td>
                 <td>{{ order.custname }}</td>
+                <td>{{ order.total }}</td>
+                <td>{{ order.paid }}</td>
             </tr>
             <tr>
             <th>Items</th>
@@ -80,7 +84,7 @@ li a:hover:not(.active) {
              {% for item in order.customerorders_set.all %}
                 <tr>
                     <td>{{ item.menu_item_id.name }}</td>
-                 <td>{{ item.quantity }}</td>
+                    <td>{{ item.quantity }}</td>
                 </tr>
                  {% endfor %}
             {% endfor %}
@@ -96,6 +100,7 @@ li a:hover:not(.active) {
             <p>No active orders</p>
         {% endif %}
     </div>
+    <
     {% else %}
         <p>You are not logged in</p>
         <a href="{% url 'login' %}">Log In</a>
