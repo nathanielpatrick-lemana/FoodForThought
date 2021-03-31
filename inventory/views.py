@@ -8,7 +8,7 @@ from .models import Ingredients
 from .models import ItemStockLevels
 from .models import CustomerOrders
 from .models import Orders
-import datetime
+import numpy as np
 from .forms import OrderForm
 from .forms import IngredientForm
 from .forms import RestockForm
@@ -79,7 +79,9 @@ def acctdet(request):
     updateform = AcctDetUpdateForm(request.POST or None)
     if updateform.is_valid():
         newinfo = get_user_model().objects.all().filter(id=custid)
-        newinfo.update(first_name=updateform.cleaned_data.get('first_name'), last_name=updateform.cleaned_data.get('last_name'), email=updateform.cleaned_data.get('email_addr'))
+        newinfo.update(first_name=updateform.cleaned_data.get('first_name'),
+                       last_name=updateform.cleaned_data.get('last_name'),
+                       email=updateform.cleaned_data.get('email_addr'))
         context = {
             'orders': orders,
             'form': updateform,
@@ -202,21 +204,51 @@ def sales(request):
 # add in charts for daily, weekly and monthly revenue
 # charts: Sales by product doughnut chart, avg daily sale, avg weekly sales, avg daily revenue, avg monthly revenue
 def doughnut_chart(request):
+    #SOMETHING IS WRONG WITH THIS CHART. ONLY CHEESE PIZZA WILL UPDATE BUT ALL OTHER CHARTS ARE FINE
     with connection.cursor() as cursor:
         cursor.execute(
-            "SELECT inventory_item.name, SUM(inventory_customerorders.quantity) FROM inventory_item, inventory_customerorders, inventory_orders WHERE inventory_customerorders.id = inventory_orders.order AND inventory_customerorders.menu_item_id_id = inventory_item.id GROUP BY inventory_item.name")
-        menu_items = [item[0] for item in cursor.fetchall()]
+            "SELECT inventory_item.name FROM inventory_item, inventory_customerorders, inventory_orders WHERE inventory_customerorders.id = inventory_orders.order AND inventory_customerorders.menu_item_id_id = inventory_item.id GROUP BY inventory_item.name")
+        doughnut_menu_items = [item[0] for item in cursor.fetchall()]
         cursor.execute(
             "SELECT inventory_item.name, SUM(inventory_customerorders.quantity) FROM inventory_item, inventory_customerorders, inventory_orders WHERE inventory_customerorders.id = inventory_orders.order AND inventory_customerorders.menu_item_id_id = inventory_item.id GROUP BY inventory_item.name")
         sales_totals = [item[1] for item in cursor.fetchall()]
     return JsonResponse(data={
-        'labels': menu_items,
+        'labels': doughnut_menu_items,
         'data': sales_totals,
     })
 
 
 def average_daily_sales(request):
-    yur = []
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT inventory_item.name, avg(inventory_customerorders.quantity) AS 'avg sales' FROM inventory_orders, inventory_customerorders, inventory_item WHERE inventory_orders.order = inventory_customerorders.order_id_id AND inventory_item.id = inventory_customerorders.menu_item_id_id GROUP BY inventory_item.name;")
+        menu_items = [item[0] for item in cursor.fetchall()]
+        cursor.execute(
+            "SELECT inventory_item.name, avg(inventory_customerorders.quantity) AS 'avg sales' FROM inventory_orders, inventory_customerorders, inventory_item WHERE inventory_orders.order = inventory_customerorders.order_id_id AND inventory_item.id = inventory_customerorders.menu_item_id_id GROUP BY inventory_item.name;")
+        average_daily = [item[1] for item in cursor.fetchall()]
+    return JsonResponse(data={
+        'labels': menu_items,
+        'data': average_daily,
+    })
+
+
+def average_weekly_sales(request):
+    # find what is the current week
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT inventory_item.name, week(inventory_orders.order_date), avg(inventory_customerorders.quantity) FROM inventory_orders, inventory_customerorders, inventory_item WHERE inventory_orders.order = inventory_customerorders.order_id_id AND inventory_item.id = inventory_customerorders.menu_item_id_id AND week(inventory_orders.order_date) > 0 GROUP BY inventory_item.name;")
+        menu_items = [item[0] for item in cursor.fetchall()]
+        cursor.execute(
+            "SELECT inventory_item.name, week(inventory_orders.order_date), avg(inventory_customerorders.quantity) FROM inventory_orders, inventory_customerorders, inventory_item WHERE inventory_orders.order = inventory_customerorders.order_id_id AND inventory_item.id = inventory_customerorders.menu_item_id_id AND week(inventory_orders.order_date) > 0 GROUP BY inventory_item.name;")
+        average_weekly = [item[2] for item in cursor.fetchall()]
+
+        for i in range(0, np.size(average_weekly)):
+            average_weekly[i] = average_weekly[i] * 7
+
+    return JsonResponse(data={
+        'labels': menu_items,
+        'data': average_weekly,
+    })
 
 
 def aggregated_order(request, order):

@@ -124,25 +124,38 @@ li a:hover:not(.active) {
                 <div class="col-md-6 col-12">
                     <div class="card" style="width:500px;height:500px;margin-top:30px;">
                         <div class="body">
-                            <canvas id="avg-daily-sales" width="450" height="450"></canvas>
+                            <canvas id="avg-daily-sales" width="450" height="450" data-url="{% url 'averageDaily' %}"></canvas>
                             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
                             <script>
-                                const daily_ctx = document.getElementById('avg-daily-sales').getContext('2d');
-                                const average_daily_sales = new Chart(daily_ctx, {
-                                    // The type of chart we want to create
-                                    type: 'bar',
-                                      // The data for our dataset
-                                    data: {
-                                        labels: ['Cheese Pizza', 'Meat Lovers', 'Eggplant Parm', 'Chicken Parm', 'Meatball Parm', 'Eggplant Parm Calzone', 'Chicken Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Chicken Salad', 'Cobb Salad'],
-                                        datasets: [{
-                                            label: 'Average Daily Sales',
-                                            backgroundColor: '#6929c4',
-                                            borderColor: '#6929c4',
-                                            //CHANGE DATA TO REFLECT AVERAGE DAILY SALES
-                                            data: [35, 24, 18, 23, 9, 23, 17, 29, 16, 8]
-                                        }]
-                                    },
-                                });
+                                $(function () {
+                                    let $avgDailyChart = $("#avg-daily-sales");
+                                    $.ajax({
+                                        url: $avgDailyChart.data("url"),
+                                        success: function (data) {
+                                            let ctx = $avgDailyChart[0].getContext("2d");
+                                            new Chart(ctx, {
+                                                type: "bar",
+                                                data: {
+                                                    labels: data.labels,
+                                                    datasets: [{
+                                                        label: 'Daily Sales',
+                                                        backgroundColor: '#6929c4',
+                                                        borderColor: '#6929c4',
+                                                        data: data.data
+                                                    }]
+                                                },
+                                                options: {
+                                                    title: {
+                                                      display: true,
+                                                      text: 'Average Daily Sales'
+                                                    }
+                                                }
+                                            })
+                                        }
+
+                                    })
+                                })
+
                             </script>
                         </div>
                     </div>
@@ -150,26 +163,55 @@ li a:hover:not(.active) {
                 <div class="col-md-6 col-12">
                     <div class="card" style="width:500px;height:500px;margin-top:30px;">
                         <div class="body">
-                            <canvas id="avg-weekly-sales" width="450" height="450"></canvas>
+                            <canvas id="avg-weekly-sales" width="450" height="450" data-url="{% url 'averageWeekly' %}"></canvas>
                             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
                             <script>
-                                    const weekly_ctx = document.getElementById('avg-weekly-sales').getContext('2d');
-                                    const weekly_chart = new Chart(weekly_ctx, {
+                                $(function () {
+                                    let $avgWeeklyChart = $("#avg-weekly-sales");
+                                    $.ajax({
+                                        url: $avgWeeklyChart.data("url"),
+                                        success: function (data) {
+                                            let ctx = $avgWeeklyChart[0].getContext("2d");
+                                            new Chart(ctx, {
+                                                type: "bar",
+                                                data: {
+                                                    labels: data.labels,
+                                                    datasets: [{
+                                                        label: 'Weekly Sales',
+                                                        backgroundColor: '#009d9a',
+                                                        borderColor: '#009d9a',
+                                                        data: data.data
+                                                    }]
+                                                },
+                                                options: {
+                                                    title: {
+                                                      display: true,
+                                                      text: 'Average Weekly Sales'
+                                                    }
+                                                }
+                                            })
+                                        }
+
+                                    })
+                                })
+
+                               //     const weekly_ctx = document.getElementById('avg-weekly-sales').getContext('2d');
+                               //     const weekly_chart = new Chart(weekly_ctx, {
                                       // The type of chart we want to create
-                                      type: 'bar',
+                               //       type: 'bar',
 
                                       // The data for our dataset
-                                      data: {
-                                        labels: ['Cheese Pizza', 'Meat Lovers', 'Eggplant Parm', 'Chicken Parm', 'Meatball Parm', 'Eggplant Parm Calzone', 'Chicken Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Chicken Salad', 'Cobb Salad'],
-                                        datasets: [{
-                                          label: 'Avg Weekly Sales',
-                                          backgroundColor: '#009d9a',
-                                          borderColor: '#009d9a',
+                                 //     data: {
+                                     //   labels: ['Cheese Pizza', 'Meat Lovers', 'Eggplant Parm', 'Chicken Parm', 'Meatball Parm', 'Eggplant Parm Calzone', 'Chicken Parm Calzone', 'Buffalo Chicken Calzone', 'BLT Chicken Salad', 'Cobb Salad'],
+                             //  /         datasets: [{
+                                  //        label: 'Avg Weekly Sales',
+                               //           backgroundColor: '#009d9a',
+                               //           borderColor: '#009d9a',
 
-                                          data: [245, 168, 126, 161, 63, 161, 119, 203, 112, 56]
-                                        }]
-                                      },
-                                      });
+                                 //         data: [245, 168, 126, 161, 63, 161, 119, 203, 112, 56]
+                                   //     }]
+                                //      },
+                                  //    });
 
                             </script>
                         </div>
