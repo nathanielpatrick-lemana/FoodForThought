@@ -11,8 +11,7 @@ VERIFICATION_VALUE_RE = r'^([0-9]{3,4})$'
 
 
 class OrderForm(forms.Form):
-    # order_this = forms.BooleanField(help_text="Do you want to order this item?", required=False, initial=False)
-    item_quantity = forms.IntegerField(help_text="Order how many?", min_value=0, initial=0)
+    quantity = forms.IntegerField(min_value=0, initial=0, required=False)
 
 
 class IngredientForm(forms.Form):

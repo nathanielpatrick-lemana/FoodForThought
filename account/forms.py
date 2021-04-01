@@ -7,6 +7,8 @@ from .models import User
 
 class CustomerAcctForm(UserCreationForm):
     email = forms.EmailField(required=True, label='Email address')
+    firstname = forms.CharField(required=True, label='First name')
+    lastname = forms.CharField(required=True, label='Last name')
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -16,6 +18,8 @@ class CustomerAcctForm(UserCreationForm):
         user = super().save(commit=False)
         user.is_customer = True
         user.email = self.cleaned_data["email"]
+        user.first_name = self.cleaned_data["firstname"]
+        user.last_name = self.cleaned_data["lastname"]
         user.save()
         return user
 

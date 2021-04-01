@@ -8,7 +8,6 @@ from .models import Ingredients
 from .models import ItemStockLevels
 from .models import CustomerOrders
 from .models import Orders
-import numpy as np
 from .forms import OrderForm
 from .forms import IngredientForm
 from .forms import RestockForm
@@ -48,7 +47,10 @@ def order(request):
         neworder = Orders(new_id, datetime.date.today(), request.user.username, request.user.id, False, True, 0.00)
         neworder.save()
         for form in formset:
-            quantity = form.cleaned_data.get('item_quantity', 0)
+            quantity = form.cleaned_data.get('quantity', 0)
+            if quantity == 0:
+                counter = counter + 1
+                continue
             custor = CustomerOrders(counter * new_id, new_id, counter, quantity)
             custor.save()
             counter = counter + 1

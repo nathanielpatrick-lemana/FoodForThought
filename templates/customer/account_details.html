@@ -84,7 +84,7 @@ li a:hover:not(.active) {
             {% if user.is_authenticated %}
                 <h2>Logged in as {{  user.username }}. Not {{ user.username }}? <a href="{% url 'logout' %}">Log out</a></h2>
                 <h3>Account</h3>
-                    <table style="width: 50%">
+                    <table style="width:45%; margin:0 auto">
                         <tr>
                             <th>Username</th>
                             <th>First name</th>

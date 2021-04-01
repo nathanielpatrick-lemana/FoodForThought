@@ -51,6 +51,20 @@ li a:hover:not(.active) {
   color: white;
   }
 
+#items {
+  float: left;
+  height: 100%;
+  width: 50%;
+  padding: 0 10px;
+}
+
+#boxes {
+  width: 50%;
+  float: left;
+  height: 100%;
+  padding: 0 10px;
+}
+
 #popup-1 {
 	display: none;
 	background-color: rgba(255,0,0,1);
@@ -81,32 +95,42 @@ li a:hover:not(.active) {
             <li><a href="{% url "order" %}">Order</a></li>
             <li><h4>Powered by Food for Thought</h4></li>
         </ul>
-        <div style="margin-left:17%;padding:1px 16px;height:1000px;">
+        <div style="margin-left:17%;padding:1px 16px;height:100%;">
             <h1>Order from Frankie's Italian Cuisine!</h1>
             {% if user.is_authenticated %}
                 <h2>Logged in as {{  user.username }}. Not {{ user.username }}? <a href="{% url 'logout' %}">Log out</a></h2>
             {% else %}
                 <meta http-equiv="refresh" content="0; URL={% url "login" %}"/>
             {% endif %}
-        <form action="" method="post" enctype="multipart/form-data"><table style="width:100%">
+        <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-                    <tr>
-                        <th>Item</th>
-                        <th>Price</th>
-                    </tr>
-                        {% for item in items %}
+            <div id="items">
+                <table style="width:100%; height: 100%">
+                        <tr>
+                            <th>Item</th>
+                            <th>Price</th>
+                        </tr>
+                            {% for item in items %}
+                                <tr style="height: 36px">
+                                    <td>{{ item.name }}</td>
+                                    <td>${{ item.price }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+            </div>
+            <div id="boxes">
+                    <table style="width:100%; height: 100%;">
                             <tr>
-                                <td>{{ item.name }}</td>
-                                <td>${{ item.price }}</td>
+                            <th>Quantities</th>
+                            </tr>
+                        {{ formset.management_form }}
+                        {% for formset in formset %}
+                            <tr>
+                            <td>{{ formset.as_table }}</td>
                             </tr>
                         {% endfor %}
                     </table>
-                    <table>
-                        {{ formset.management_form }}
-                        {% for formset in formset %}
-                            <td>{{ formset.as_table }}</td>
-                        {% endfor %}
-                    </table>
+            </div>
             <div id="popup-1">
                 <div class="popup-content">
                     <h2>Payment</h2>
@@ -117,7 +141,7 @@ li a:hover:not(.active) {
                 </div>
             </div>
             </form>
-            <button id="showpopup">Pay for order</button>
+            <button id="showpopup" style="width: 100%; height: 40px;">Pay for order</button>
         </div>
 
     <script>
