@@ -61,9 +61,10 @@ def order(request):
             custor = CustomerOrders(counter * new_id, new_id, counter, quantity)
             custor.save()
             getprice_cur = connection.cursor()
-            getprice_cur.execute("SELECT inventory_item.price FROM inventory_item WHERE inventory_item.id = " + str(counter) + ";")
+            getprice_cur.execute(
+                "SELECT inventory_item.price FROM inventory_item WHERE inventory_item.id = " + str(counter) + ";")
             add = getprice_cur.fetchall()
-            total = total + (add[0][0]*quantity)
+            total = total + (add[0][0] * quantity)
             counter = counter + 1
         neworder.total = total
         neworder.save()
@@ -71,20 +72,27 @@ def order(request):
         # update the stock history here
         order_id = neworder.order
         # get the results of the consumption query
-        cursor.execute("SELECT inventory_ingredients.name, SUM(inventory_recipeitem.quantity) * inventory_customerorders.quantity as 'aggregated' FROM inventory_ingredients, inventory_item, inventory_recipeitem, inventory_customerorders, inventory_orders WHERE inventory_orders.order = {} AND inventory_customerorders.order_id_id = inventory_orders.order AND inventory_customerorders.menu_item_id_id = inventory_recipeitem.menu_item_id_id AND inventory_recipeitem.ingredient_id_id = inventory_ingredients.ingredient GROUP BY inventory_ingredients.name;".format(order_id))
+        cursor.execute(
+            "SELECT inventory_ingredients.name, SUM(inventory_recipeitem.quantity) * inventory_customerorders.quantity as 'aggregated' FROM inventory_ingredients, inventory_item, inventory_recipeitem, inventory_customerorders, inventory_orders WHERE inventory_orders.order = {} AND inventory_customerorders.order_id_id = inventory_orders.order AND inventory_customerorders.menu_item_id_id = inventory_recipeitem.menu_item_id_id AND inventory_recipeitem.ingredient_id_id = inventory_ingredients.ingredient GROUP BY inventory_ingredients.name;".format(
+                order_id))
         # loop over tuple to capture the name of ingredients
         ingredient_names = [item[0] for item in cursor.fetchall()]
-        cursor.execute("SELECT inventory_ingredients.name, SUM(inventory_recipeitem.quantity) * inventory_customerorders.quantity as 'aggregated' FROM inventory_ingredients, inventory_item, inventory_recipeitem, inventory_customerorders, inventory_orders WHERE inventory_orders.order = {} AND inventory_customerorders.order_id_id = inventory_orders.order AND inventory_customerorders.menu_item_id_id = inventory_recipeitem.menu_item_id_id AND inventory_recipeitem.ingredient_id_id = inventory_ingredients.ingredient GROUP BY inventory_ingredients.name;".format(order_id))
-        ingredient_amounts = [item[1] for item in custor.fetchall()]
+        cursor.execute(
+            "SELECT inventory_ingredients.name, SUM(inventory_recipeitem.quantity) * inventory_customerorders.quantity as 'aggregated' FROM inventory_ingredients, inventory_item, inventory_recipeitem, inventory_customerorders, inventory_orders WHERE inventory_orders.order = {} AND inventory_customerorders.order_id_id = inventory_orders.order AND inventory_customerorders.menu_item_id_id = inventory_recipeitem.menu_item_id_id AND inventory_recipeitem.ingredient_id_id = inventory_ingredients.ingredient GROUP BY inventory_ingredients.name;".format(
+                order_id))
+        ingredient_amounts = [item[1] for item in cursor.fetchall()]
         # run cursor execute update query based on the ingredient name
         for i in range(len(ingredient_names)):
             # using the ingredient name in list use an sql query to get the current stock level
-            cursor.execute("SELECT inventory_itemstocklevels.quantity FROM inventory_itemstocklevels WHERE inventory_itemstocklevels.ingredient_name = {ingredient_names[i]};")
+            cursor.execute(
+                "SELECT inventory_itemstocklevels.quantity FROM inventory_itemstocklevels WHERE inventory_itemstocklevels.ingredient_name = " + str(
+                    ingredient_names[i]) + ";")
             item_stock_result = cursor.fetchall()
 
             # get the ingredient id
             cursor.execute(
-                "SELECT inventory_itemstocklevels.ingredient_id_id FROM inventory_itemstocklevels WHERE inventory_itemstocklevels.ingredient_name = {ingredient_names[i]};")
+                "SELECT inventory_itemstocklevels.ingredient_id_id FROM inventory_itemstocklevels WHERE inventory_itemstocklevels.ingredient_name = " + str(
+                    ingredient_names[i]) + ";")
             ingredient_id = cursor.fetchall()
             ingredient_id = str(ingredient_id[0][0])
             ingredient_id = int(ingredient_id)
@@ -93,17 +101,22 @@ def order(request):
             item_stock_result = item_stock_result - ingredient_amounts[i]
 
             # that resulting amount will be updated in item stock levels and given a new row in stock history
-            cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = {item_stock_result} WHERE inventory_itemstocklevels.ingredient_id_id = {ingredient_id};")
+            cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = " + str(
+                item_stock_result) + " WHERE inventory_itemstocklevels.ingredient_id_id = " + str(ingredient_id) + ";")
 
             # insert new record into stock history
             today = datetime.date.today()
-            cursor.execute("INSERT INTO inventory_stockhistory VALUES ('{today}', item_stock_result, ingredient_id);")
+            cursor.execute(
+                "INSERT INTO inventory_stockhistory VALUES ('" + str(today) + "', item_stock_result, ingredient_id);")
 
-        cursor.execute("SELECT inventory_item.name, inventory_customerorders.quantity FROM inventory_customerorders, inventory_item WHERE inventory_customerorders.order_id_id =" + str(new_id) + " AND inventory_item.id = inventory_customerorders.menu_item_id_id;")
+        cursor.execute(
+            "SELECT inventory_item.name, inventory_customerorders.quantity FROM inventory_customerorders, inventory_item WHERE inventory_customerorders.order_id_id =" + str(
+                new_id) + " AND inventory_item.id = inventory_customerorders.menu_item_id_id;")
         results = cursor.fetchall()
         send_mail('Order number ' + str(new_id) + ' at Frankie\'s Italian Cuisine has been confirmed',
                   'Your order with order number ' + str(new_id) + ' at Frankie\'s Italian Cuisine has been confirmed. '
-                                                                  'Order contents: ' + str(results) + ' Order total of $' + str(total) + ' paid using the card ending in ' + cardno,
+                                                                  'Order contents: ' + str(
+                      results) + ' Order total of $' + str(total) + ' paid using the card ending in ' + cardno,
                   'Frankie\'s Italian Cuisine',
                   [request.user.email],
                   )
