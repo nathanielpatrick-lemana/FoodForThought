@@ -68,6 +68,37 @@ def order(request):
         neworder.total = total
         neworder.save()
         cursor = connection.cursor()
+        # update the stock history here
+        order_id = neworder.order
+        # get the results of the consumption query
+        cursor.execute("SELECT inventory_ingredients.name, SUM(inventory_recipeitem.quantity) * inventory_customerorders.quantity as 'aggregated' FROM inventory_ingredients, inventory_item, inventory_recipeitem, inventory_customerorders, inventory_orders WHERE inventory_orders.order = {} AND inventory_customerorders.order_id_id = inventory_orders.order AND inventory_customerorders.menu_item_id_id = inventory_recipeitem.menu_item_id_id AND inventory_recipeitem.ingredient_id_id = inventory_ingredients.ingredient GROUP BY inventory_ingredients.name;".format(order_id))
+        # loop over tuple to capture the name of ingredients
+        ingredient_names = [item[0] for item in cursor.fetchall()]
+        cursor.execute("SELECT inventory_ingredients.name, SUM(inventory_recipeitem.quantity) * inventory_customerorders.quantity as 'aggregated' FROM inventory_ingredients, inventory_item, inventory_recipeitem, inventory_customerorders, inventory_orders WHERE inventory_orders.order = {} AND inventory_customerorders.order_id_id = inventory_orders.order AND inventory_customerorders.menu_item_id_id = inventory_recipeitem.menu_item_id_id AND inventory_recipeitem.ingredient_id_id = inventory_ingredients.ingredient GROUP BY inventory_ingredients.name;".format(order_id))
+        ingredient_amounts = [item[1] for item in custor.fetchall()]
+        # run cursor execute update query based on the ingredient name
+        for i in range(len(ingredient_names)):
+            # using the ingredient name in list use an sql query to get the current stock level
+            cursor.execute("SELECT inventory_itemstocklevels.quantity FROM inventory_itemstocklevels WHERE inventory_itemstocklevels.ingredient_name = {ingredient_names[i]};")
+            item_stock_result = cursor.fetchall()
+
+            # get the ingredient id
+            cursor.execute(
+                "SELECT inventory_itemstocklevels.ingredient_id_id FROM inventory_itemstocklevels WHERE inventory_itemstocklevels.ingredient_name = {ingredient_names[i]};")
+            ingredient_id = cursor.fetchall()
+            ingredient_id = str(ingredient_id[0][0])
+            ingredient_id = int(ingredient_id)
+
+            # store that result and subtract the corresponding ingredient amount
+            item_stock_result = item_stock_result - ingredient_amounts[i]
+
+            # that resulting amount will be updated in item stock levels and given a new row in stock history
+            cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = {item_stock_result} WHERE inventory_itemstocklevels.ingredient_id_id = {ingredient_id};")
+
+            # insert new record into stock history
+            today = datetime.date.today()
+            cursor.execute("INSERT INTO inventory_stockhistory VALUES ('{today}', item_stock_result, ingredient_id);")
+
         cursor.execute("SELECT inventory_item.name, inventory_customerorders.quantity FROM inventory_customerorders, inventory_item WHERE inventory_customerorders.order_id_id =" + str(new_id) + " AND inventory_item.id = inventory_customerorders.menu_item_id_id;")
         results = cursor.fetchall()
         send_mail('Order number ' + str(new_id) + ' at Frankie\'s Italian Cuisine has been confirmed',
@@ -221,16 +252,21 @@ def sales(request):
     })
 
 
-# item stock level will record the stock level of the item after restock with a restock date
+def update_stock_history(request):
+    # update every ingredient stock history for every order that is placed (STICK INSIDE ORDER FUNCTION)
+    # basically insert new row after calculating
+    BRUH = []
+
+
+# item stock level will record the stock level of the item after every day
 def item_stock_level(request):
-    # this function will run when the stock consumption function sees an order will trip restock (i.e fall under a certain level or hit that level)
+    # this function will run when
     bruh = []
 
 
 # stock history will be recorded every day and will hold the stock level after every day of business
 def stock_consumption(request):
-    # consumption is based off the date will need 7 data points so the quantity of each inventory item from 7 days before today to today
-
+    # consumption is based off the date so date of the order
 
     # this function should run after every order
     # make sure to compare if the order will cause negative inventory or if the order will make inventory trip the restock (i.e hit or go under restock level)
