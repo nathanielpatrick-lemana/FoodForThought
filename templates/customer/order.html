@@ -104,7 +104,7 @@ li a:hover:not(.active) {
             {% endif %}
         <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-            <div id="items">
+            <div id="menu-items">
                 <table style="width:100%; height: 100%">
                         <tr>
                             <th>Item</th>
@@ -124,9 +124,9 @@ li a:hover:not(.active) {
                             <th>Quantities</th>
                             </tr>
                         {{ formset.management_form }}
-                        {% for formset in formset %}
+                        {% for n_formset in formset %}
                             <tr>
-                            <td>{{ formset.as_table }}</td>
+                            <td>{{ n_formset.as_table }}</td>
                             </tr>
                         {% endfor %}
                     </table>

@@ -73,13 +73,13 @@ li a:hover:not(.active) {
                 <div class="col-md-6 col-12">
                     <div class="card" style="width:500px;height:500px;margin-top:30px;">
                         <div class="body">
-                            <canvas id="sales-by-product" width="450" height="450" data-url="{% url 'doughnutChart' %}">
+                            <canvas id="doughnut-chart" width="450" height="450" data-url="{% url 'doughnutChart' %}">
                             </canvas>
                             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
                             <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
                             <script>
                                 $(function () {
-                                    let $doughnutChart = $("#sales-by-product");
+                                    let $doughnutChart = $("#doughnut-chart");
                                     $.ajax({
                                         url: $doughnutChart.data("url"),
                                         success: function (data) {

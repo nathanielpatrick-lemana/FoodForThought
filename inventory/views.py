@@ -3,6 +3,7 @@ from django.template import loader
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
 from django.db import connection
+
 from .models import Item
 from .models import Ingredients
 from .models import ItemStockLevels
@@ -19,6 +20,7 @@ from django.forms import formset_factory
 from django.core.mail import send_mail
 from django.http import JsonResponse
 import datetime
+import numpy as np
 
 
 # Create your views here.
@@ -37,13 +39,16 @@ def order(request):
     stocklevel = ItemStockLevels.objects.all()
 
     # creating a formset
-    OrderFormSet = formset_factory(OrderForm, extra=10)
-    formset = OrderFormSet(request.POST or None, initial=0)
+    modelformset = formset_factory(OrderForm, extra=10)
+    formset = modelformset(request.POST or None, initial=0)
     cardform = CardForm(request.POST or None)
 
     if formset.is_valid() and cardform.is_valid():
-        new_id = random.randint(1000, 9999)
+        # fix this and think of a new way of giving orders ids
+        new_id = 255
         counter = 1
+        items = []
+
         neworder = Orders(new_id, datetime.date.today(), request.user.username, request.user.id, False, True, 0.00)
         neworder.save()
         for form in formset:
@@ -203,17 +208,38 @@ def sales(request):
     })
 
 
+# item stock level will record the stock level of the item after restock with a restock date
+def item_stock_level(request):
+    # this function will run when the stock consumption function sees an order will trip restock (i.e fall under a certain level or hit that level)
+    bruh = []
+
+
+# stock history will be recorded every day and will hold the stock level after every day of business
+def stock_consumption(request):
+    # consumption is based off the date will need 7 data points so the quantity of each inventory item from 7 days before today to today
+
+
+    # this function should run after every order
+    # make sure to compare if the order will cause negative inventory or if the order will make inventory trip the restock (i.e hit or go under restock level)
+    # if the order causes restock then run item stock level
+    bruh = []
+
+
 # add in charts for daily, weekly and monthly revenue
 # charts: Sales by product doughnut chart, avg daily sale, avg weekly sales, avg daily revenue, avg monthly revenue
 def doughnut_chart(request):
-    #SOMETHING IS WRONG WITH THIS CHART. ONLY CHEESE PIZZA WILL UPDATE BUT ALL OTHER CHARTS ARE FINE
-    with connection.cursor() as cursor:
-        cursor.execute(
-            "SELECT inventory_item.name FROM inventory_item, inventory_customerorders, inventory_orders WHERE inventory_customerorders.id = inventory_orders.order AND inventory_customerorders.menu_item_id_id = inventory_item.id GROUP BY inventory_item.name")
-        doughnut_menu_items = [item[0] for item in cursor.fetchall()]
-        cursor.execute(
-            "SELECT inventory_item.name, SUM(inventory_customerorders.quantity) FROM inventory_item, inventory_customerorders, inventory_orders WHERE inventory_customerorders.id = inventory_orders.order AND inventory_customerorders.menu_item_id_id = inventory_item.id GROUP BY inventory_item.name")
-        sales_totals = [item[1] for item in cursor.fetchall()]
+    # SOMETHING IS WRONG WITH THIS CHART. ONLY CHEESE PIZZA WILL UPDATE BUT ALL OTHER CHARTS ARE FINE
+    doughnut_menu_items = []
+    sales_totals = []
+
+    cursor = connection.cursor()
+    cursor.execute(
+        "SELECT inventory_item.name, SUM(inventory_customerorders.quantity) FROM inventory_item, inventory_customerorders, inventory_orders WHERE inventory_customerorders.order_id_id = inventory_orders.order AND inventory_customerorders.menu_item_id_id = inventory_item.id GROUP BY inventory_item.name")
+    doughnut_menu_items = [item[0] for item in cursor.fetchall()]
+    cursor.execute(
+        "SELECT inventory_item.name, SUM(inventory_customerorders.quantity) FROM inventory_item, inventory_customerorders, inventory_orders WHERE inventory_customerorders.order_id_id = inventory_orders.order AND inventory_customerorders.menu_item_id_id = inventory_item.id GROUP BY inventory_item.name")
+    sales_totals = [item[1] for item in cursor.fetchall()]
+
     return JsonResponse(data={
         'labels': doughnut_menu_items,
         'data': sales_totals,

@@ -243,4 +243,4 @@ class CardForm(forms.Form):
     cardholder = forms.CharField(max_length=50, required=True)
     card_number = CreditCardField(placeholder=u'0000 0000 0000 0000', min_length=12, max_length=19)
     exp_date = ExpiryDateField(required=True)
-    cvv=VerificationValueField(required=True)
+    cvv = VerificationValueField(required=True)
