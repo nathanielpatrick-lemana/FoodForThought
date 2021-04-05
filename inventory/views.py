@@ -85,14 +85,16 @@ def order(request):
         for i in range(len(ingredient_names)):
             # using the ingredient name in list use an sql query to get the current stock level
             cursor.execute(
-                "SELECT inventory_itemstocklevels.quantity FROM inventory_itemstocklevels WHERE inventory_itemstocklevels.ingredient_name = " + str(
-                    ingredient_names[i]) + ";")
+                "SELECT inventory_itemstocklevels.quantity FROM inventory_itemstocklevels WHERE inventory_itemstocklevels.ingredient_name = '" + str(
+                    ingredient_names[i]) + "';")
             item_stock_result = cursor.fetchall()
+            item_stock_result = str(item_stock_result[0][0])
+            item_stock_result = int(item_stock_result)
 
             # get the ingredient id
             cursor.execute(
-                "SELECT inventory_itemstocklevels.ingredient_id_id FROM inventory_itemstocklevels WHERE inventory_itemstocklevels.ingredient_name = " + str(
-                    ingredient_names[i]) + ";")
+                "SELECT inventory_itemstocklevels.ingredient_id_id FROM inventory_itemstocklevels WHERE inventory_itemstocklevels.ingredient_name = '" + str(
+                    ingredient_names[i]) + "';")
             ingredient_id = cursor.fetchall()
             ingredient_id = str(ingredient_id[0][0])
             ingredient_id = int(ingredient_id)
@@ -107,8 +109,7 @@ def order(request):
             # insert new record into stock history
             today = datetime.date.today()
             cursor.execute(
-                "INSERT INTO inventory_stockhistory VALUES ('" + str(today) + "', item_stock_result, ingredient_id);")
-
+                  "INSERT INTO inventory_stockhistory(date, stocklevel, ingredient_id_id) VALUES ('" + str(today) + "', " + str(item_stock_result) +', ' + str(ingredient_id) + ');')
         cursor.execute(
             "SELECT inventory_item.name, inventory_customerorders.quantity FROM inventory_customerorders, inventory_item WHERE inventory_customerorders.order_id_id =" + str(
                 new_id) + " AND inventory_item.id = inventory_customerorders.menu_item_id_id;")
