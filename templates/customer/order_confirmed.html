@@ -60,6 +60,21 @@ li a:hover:not(.active) {
         </ul>
         <div style="margin-left:17%;padding:1px 16px;height:1000px;">
             <h1>Thank you {{  user.username }}! Your order has been confirmed.</h1>
-            <h2>Your order number is {{ new_id }}. Please take note of this order number when you arrive at the restaurant. A confirmation email has been sent to {{ user.email }}.</h2>
+            <h2 style="font-weight: bold">Your order number is {{ new_id }}. Please take note of this order number when you arrive at the restaurant. A confirmation email has been sent to {{ user.email }}.</h2>
+            <h3>Order contents</h3>
+        <table style="width: 33%">
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+            </tr>
+            {% for item in results %}
+                <tr>
+                        <td>{{ item.0 }}</td>
+                        <td>{{ item.1 }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+            <h3>Order total (pre-tax)</h3>
+            <p>${{ total }} paid using card ending in {{ cardno }}</p>
         </div>
 {% endblock %}

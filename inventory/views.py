@@ -45,12 +45,14 @@ def order(request):
 
     if formset.is_valid() and cardform.is_valid():
         # fix this and think of a new way of giving orders ids
-        new_id = 255
+        cardno = str(cardform.cleaned_data.get('card_number'))[-4:]
+        new_id = random.randrange(0, 99999)
         counter = 1
         items = []
 
         neworder = Orders(new_id, datetime.date.today(), request.user.username, request.user.id, False, True, 0.00)
         neworder.save()
+        total = 0
         for form in formset:
             quantity = form.cleaned_data.get('quantity', 0)
             if quantity == 0:
@@ -58,17 +60,28 @@ def order(request):
                 continue
             custor = CustomerOrders(counter * new_id, new_id, counter, quantity)
             custor.save()
+            getprice_cur = connection.cursor()
+            getprice_cur.execute("SELECT inventory_item.price FROM inventory_item WHERE inventory_item.id = " + str(counter) + ";")
+            add = getprice_cur.fetchall()
+            total = total + (add[0][0]*quantity)
             counter = counter + 1
-        context = {
-            'new_id': new_id,
-        }
-
+        neworder.total = total
+        neworder.save()
+        cursor = connection.cursor()
+        cursor.execute("SELECT inventory_item.name, inventory_customerorders.quantity FROM inventory_customerorders, inventory_item WHERE inventory_customerorders.order_id_id =" + str(new_id) + " AND inventory_item.id = inventory_customerorders.menu_item_id_id;")
+        results = cursor.fetchall()
         send_mail('Order number ' + str(new_id) + ' at Frankie\'s Italian Cuisine has been confirmed',
-                  'Your order with order number ' + str(new_id) + ' at Frankie\'s Italian Cuisine has been confirmed.',
-                  None,
+                  'Your order with order number ' + str(new_id) + ' at Frankie\'s Italian Cuisine has been confirmed. '
+                                                                  'Order contents: ' + str(results) + ' Order total of $' + str(total) + ' paid using the card ending in ' + cardno,
+                  'Frankie\'s Italian Cuisine',
                   [request.user.email],
                   )
-
+        context = {
+            'new_id': new_id,
+            'results': results,
+            'total': total,
+            'cardno': cardno
+        }
         return render(request, "customer/order_confirmed.html", context)
 
     # Add the formset to context dictionary
