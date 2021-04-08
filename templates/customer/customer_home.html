@@ -13,10 +13,10 @@
             <li><a class="list-a-nav" href="{% url "order" %}">Order</a></li>
             <li><a class="list-a-nav" href={% url "custdetail" %}>Account</li>
             {% if user.is_authenticated %}
-                        <li><a class="list-a-nav" href="{% url "logout" %}">Log Out</a></li>
+                        <li><a class="list-a-nav" href="{% url "logout" %}">Log Out</li>
             {% else %}
                         <li><a class="list-a-nav" href="{% url "login" %}">Log In</a></li>
-                        <li><a class="list-a-nav" href="{% url "custsignup" %}">Create Account</a></li>
+                        <li><a class="list-a-nav" href="{% url "custsignup" %}">Create Account</li>
             {% endif %}
             <li><a class="list-a-nav" href="{% url "cust_home" %}">Powered by Food for Thought</a></li>
         </ul>
