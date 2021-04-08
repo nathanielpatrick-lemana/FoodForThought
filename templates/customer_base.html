@@ -8,22 +8,19 @@
     <link rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Brygada+1918">
     <style>
-        html, body {
-                margin: 0;
-                padding: 0;
-                height: 100vh;
-                width: 100vw;
+        *  {
+            box-sizing: border-box;
         }
 
         body {
-        font-family: 'Brygada 1918';
-        background-image: url(https://cdn.discordapp.com/attachments/798661624181293086/820825114051870740/restaurant_interior.jpg);
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size: cover;
+            font-family: 'Brygada 1918';
+            background-image: url(https://cdn.discordapp.com/attachments/798661624181293086/820825114051870740/restaurant_interior.jpg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
         }
 
-        ul {
+        .ul-nav {
           list-style-type: none;
           margin: 0;
           padding: 0;
@@ -34,28 +31,30 @@
           overflow: auto;
         }
 
-        li a {
+        .list-a-nav {
+          display: block;
+          color: white;
+          padding: 8px 22px;
+          text-decoration: none;
+        }
+
+        .list-b-nav {
           display: block;
           color: white;
           padding: 8px 16px;
           text-decoration: none;
         }
 
-        li b {
+        .list-h1-nav {
           display: block;
           color: white;
-          padding: 8px 16px;
+          padding: 16px 16px;
           text-decoration: none;
+          font-size: x-large;
+          font-weight: bold;
         }
 
-        li h1 {
-          display: block;
-          color: white;
-          padding: 8px 16px;
-          text-decoration: none;
-        }
-
-        li h4 {
+        .list-h4-nav {
           display: block;
           color: white;
           padding: 8px 16px;

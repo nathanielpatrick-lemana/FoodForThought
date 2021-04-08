@@ -1,75 +1,28 @@
-{% extends 'base.html' %}
+{% extends 'customer_base.html' %}
 
 {% block title %}Login{% endblock %}
 
 {% block stylesheet %}
-body {
-  margin: 0;
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  width: 17%;
-  background-color: #cc0000;
-  position: fixed;
-  height: 100%;
-  overflow: auto;
-}
-
-li a {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-    li h1 {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-    li h2 {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-        li h4 {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-li a.active {
-  background-color: maroon;
-  color: white;
-}
-
-li a:hover:not(.active) {
-  background-color: maroon;
-  color: white;
-}
 {%  endblock %}
 
 {% block content %}
-    <ul>
-        <li><h1>Food for Thought</h1></li>
-        <li><h2>Frankie's Italian Cuisine</h2></li>
-        <li><a href="{% url 'cust_home' %}">Customer Home</a></li>
+    <ul class="ul-nav">
+            <li><h1 class="list-h1-nav">Frankie's Italian Cuisine</h1></li>
+            <li><a class="list-a-nav" href={% url "cust_home" %}>Customer Home</a></li>
+            <li><a class="list-a-nav" href="{% url "cust_home" %}">Powered by Food for Thought</a></li>
     </ul>
-    <div style="margin-left:17%;padding:1px 16px;height:1000px;">
-        <h2>Log In</h2>
+    <div style="margin-left:17%; padding:24px 16px; height:100%;">
+        <h2 style=" font-weight: bolder;">Log In</h2>
         <form method="post">
             {% csrf_token %}
             {{ form.as_table }}
             <button type="submit">Log In</button>
         </form>
-        <a href="{% url 'password_reset' %}">Forgot password?</a>
-        <a href="{% url 'custsignup' %}">Customers, create an account here!</a>
+        <ul style="list-style-type: none">
+            <li><a href="{% url 'password_reset' %}">Forgot password?</a></li>
+            <li><a href="{% url 'custsignup' %}">Customers, create an account here!</a></li>
+        </ul>
+        <h6 style="font-weight: bold;">Powered by the Food For Thought restaurant management platform.</h6>
+        <img src="https://cdn.discordapp.com/attachments/798661624181293086/829581558150332456/fft_logo.png" style="width: 200px; height: 90px;">
     </div>
 {% endblock %}
