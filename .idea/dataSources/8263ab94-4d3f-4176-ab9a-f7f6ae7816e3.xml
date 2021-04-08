@@ -1683,41 +1683,28 @@ model</ColNames>
       <Position>3</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="444" parent="301" name="ingredient_id_id">
+    <column id="444" parent="301" name="ingredient_id">
       <Position>4</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
     <index id="445" parent="301" name="inventory_stockhistory_stock_history_ingredient_0915461a_uniq">
       <ColNames>stock_history
-ingredient_id_id</ColNames>
+ingredient_id</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <index id="446" parent="301" name="ingredient_id_id">
-      <ColNames>ingredient_id_id</ColNames>
-      <Unique>1</Unique>
-      <Type>btree</Type>
-    </index>
-    <key id="447" parent="301" name="PRIMARY">
+    <key id="446" parent="301" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>stock_history</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="448" parent="301" name="inventory_stockhistory_stock_history_ingredient_0915461a_uniq">
+    <key id="447" parent="301" name="inventory_stockhistory_stock_history_ingredient_0915461a_uniq">
       <ColNames>stock_history
-ingredient_id_id</ColNames>
+ingredient_id</ColNames>
       <UnderlyingIndexName>inventory_stockhistory_stock_history_ingredient_0915461a_uniq</UnderlyingIndexName>
     </key>
-    <key id="449" parent="301" name="ingredient_id_id">
-      <ColNames>ingredient_id_id</ColNames>
-      <UnderlyingIndexName>ingredient_id_id</UnderlyingIndexName>
-    </key>
-    <foreign-key id="450" parent="301" name="inventory_stockhisto_ingredient_id_id_3897570f_fk_inventory">
-      <ColNames>ingredient_id_id</ColNames>
-      <RefTableName>inventory_ingredients</RefTableName>
-      <RefColNames>ingredient</RefColNames>
-    </foreign-key>
   </database-model>
 </dataSource>

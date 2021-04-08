@@ -68,44 +68,38 @@ li a:hover:not(.active) {
                 <div class="col-md-6 col-12">
                     <div class="card" style="width:1000px;height:500px;margin-top:30px;">
                         <div class="body">
-                            <canvas id="sales-by-product" width="450" height="227">
+                            <canvas id="consumption" width="450" height="227" data-url="{% url 'stockConsumption' %}">
                             </canvas>
                             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+                             <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
                             <script>
-                                const ctx = document.getElementById('sales-by-product').getContext('2d');
-                                const sales_by_product_chart = new Chart(ctx, {
-                                    // The type of chart we want to create
-                                    type: 'line',
+                                $(function () {
+                                    let $consumptionChart = $('#consumptionChart');
+                                    $.ajax({
+                                        url: $consumptionChart.data('url'),
+                                        success: function (data) {
+                                            const ctx = $consumptionChart[0].getContext('2d');
+                                            new Chart(ctx, {
+                                                type: 'line',
+                                                data: {
+                                                    labels: 'Consumption',
+                                                    datasets: [{
+                                                        label: data.labels[0],
+                                                        data:data.data[0],
+                                                        backgroundColor: 'red',
+                                                    },{
+                                                        label: data.labels[1],
+                                                        data:data.data[1],
+                                                        backgroundColor: 'green',
+                                                    }]
+                                                },
 
-                                    // The data for our dataset
-                                    data: {
-                                        labels: ['3/29/21', '3/30/21', '3/31/21', '4/1/21', '4/2/21', '4/3/21', '4/4/21'],
-                                        datasets: [{
-                                            data: [1000, 870, 500, 335],
-                                            label: "Mozzarella",
-                                            borderColor: "#3e95cd",
-                                            fill: true
-                                          }, {
-                                            data: [1000, 775, 400, 100],
-                                            label: "Tomato",
-                                            borderColor: "#8e5ea2",
-                                            fill: false
-                                          }, {
-                                            data: [900, 809, 570, 489],
-                                            label: "Olive Oil",
-                                            borderColor: "#3cba9f",
-                                            fill: false
-                                          },
-                                        ]
-                                      },
-                                      options: {
-                                        title: {
-                                          display: true,
-                                          text: 'Consumption of Most Popular Inventory'
+                                            })
                                         }
-                                      }
-                                });
-                            </script>
+
+                                    })
+                                })
+                         </script>
                         </div>
                     </div>
                 </div>

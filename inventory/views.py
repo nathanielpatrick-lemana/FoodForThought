@@ -22,6 +22,7 @@ from django.http import JsonResponse
 import datetime
 from datetime import timedelta
 import numpy as np
+import random
 
 
 # Create your views here.
@@ -101,16 +102,23 @@ def order(request):
             ingredient_id = int(ingredient_id)
 
             # store that result and subtract the corresponding ingredient amount
+            # run function to CHECK IF THE SUBTRACTION WILL RESULT IN NEGATIVE OR REORDER LEVEL
             item_stock_result = item_stock - ingredient_amounts[i]
+
+            # cursor.execute(
+            #   "SELECT inventory_stockhistory.stocklevel FROM inventory_stockhistory WHERE inventory_stockhistory.date_consumed_stock = " + str(
+            #        datetime.date.today()) + ";")
+            # inventory_out = cursor.fetchall()
+            # inventory_out = str(inventory_out[0])
+            # inventory_out = inventory_out + item_stock_result
 
             # that resulting amount will be updated in item stock levels and given a new row in stock history
             cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = " + str(
                 item_stock_result) + " WHERE inventory_itemstocklevels.ingredient_id_id = " + str(ingredient_id) + ";")
 
             # insert new record into stock history
-            today = datetime.date.today()
-            cursor.execute(
-                  "INSERT INTO inventory_stockhistory VALUES ('" + str(today) + "', " + str(item_stock_result) + ", " + str(i) + ", " + str(ingredient_id) + ") ON DUPLICATE KEY UPDATE stocklevel=" + str(item_stock_result) + ";")
+            value = random.randint(11, 100)
+            update_stock_history(item_stock_result, ingredient_id)
 
         cursor.execute(
             "SELECT inventory_item.name, inventory_customerorders.quantity FROM inventory_customerorders, inventory_item WHERE inventory_customerorders.order_id_id =" + str(
@@ -268,10 +276,15 @@ def sales(request):
     })
 
 
-def update_stock_history(request):
+def update_stock_history(item_stock, ing_id):
     # update every ingredient stock history for every order that is placed (STICK INSIDE ORDER FUNCTION)
     # basically insert new row after calculating
-    BRUH = []
+    today = datetime.date.today()
+    cursor = connection.cursor()
+    cursor.execute(
+        "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('2021-04-11', " + str(
+            item_stock) + ", " + str(
+            ing_id) + ");")
 
 
 # item stock level will record the stock level of the item after every day
@@ -281,23 +294,43 @@ def item_stock_level(request):
 
 
 # stock history will be recorded every day and will hold the stock level after every day of business
+# this will be connected to inventory
 def stock_consumption(request):
     cursor = connection.cursor()
     # consumption is based off the date so date of the order
     current_day = datetime.date.today()
     start_monday = current_day - timedelta(days=current_day.weekday())
-    end_sunday = start_monday + timedelta(days=6)
+    week_list = [start_monday]
+    for i in range(1, 7):
+        day = start_monday + timedelta(days=i)
+        week_list.append(day)
 
-    #get the first 10 ingredients
+    # get the first 10 ingredients
+    datasets = []
 
-    for x in range(0,11):
+    cursor.execute(
+        "SELECT inventory_stockhistory.date_consumed_stock FROM inventory_stockhistory WHERE inventory_stockhistory.ingredient_id = " + str(
+            x) + " inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-05' AND '2021-04-11';"
+    )
+
+    labels = [item[0] for item in cursor.fetchall()]
+
+    for x in range(0, 11):
+        data = []
         cursor.execute(
-            "SELECT "
+            "SELECT inventory_stockhistory.stocklevel FROM inventory_stockhistory WHERE inventory_stockhistory.ingredient_id = " + str(
+                x) + " inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-05' AND '2021-04-11';"
         )
-    # this function should run after every order
+        data = [item[0] for item in cursor.fetchall()]
+        datasets.append(data)
+
+    # merge all seperate data into a singular dataset
     # make sure to compare if the order will cause negative inventory or if the order will make inventory trip the restock (i.e hit or go under restock level)
     # if the order causes restock then run item stock level
-    bruh = []
+    return JsonResponse(data={
+        'labels': labels,
+        'data': datasets,
+    })
 
 
 # add in charts for daily, weekly and monthly revenue

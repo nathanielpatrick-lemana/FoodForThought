@@ -65,10 +65,10 @@ class ItemStockLevels(models.Model):
 
 
 class StockHistory(models.Model):
-    ingredient_id = models.OneToOneField(Ingredients, on_delete=models.CASCADE)
+    ingredient_id = models.IntegerField(default=1)
     date_consumed_stock = models.DateField(default=date.today)
     stocklevel = models.IntegerField()
-    stock_history = models.IntegerField(primary_key=True, default=0)
+    stock_history = models.AutoField(primary_key=True, default=1)
 
     def __str__(self):
         return 'stock level: {}'.format(self.stocklevel)
