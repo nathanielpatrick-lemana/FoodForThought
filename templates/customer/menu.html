@@ -1,78 +1,40 @@
-{% extends 'base.html' %}
+{% extends 'customer_base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Menu{% endblock %}
 
 {% block stylesheet %}
-body {
-  margin: 0;
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  width: 17%;
-  background-color: #cc0000;
-  position: fixed;
-  height: 100%;
-  overflow: auto;
-}
-
-li a {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-    li h1 {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-        li h4 {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-li a.active {
-  background-color: maroon;
-  color: white;
-}
-
-li a:hover:not(.active) {
-  background-color: maroon;
-  color: white;
-}
 {% endblock %}
 
 {% block content %}
-         <ul>
-            <li><h1>Frankie's Italian Cuisine</h1></li>
-            <li><a href={% url "cust_home" %}>Home</a></li>
-            <li><a href={% url "menu" %}>Menu</a></li>
-            <li><a href="{% url "order" %}">Order</a></li>
-            <li><h4>Powered by Food for Thought</h4></li>
+        <ul class="ul-nav">
+            <li><h1 class="list-h1-nav">Frankie's Italian Cuisine</h1></li>
+            <li><a class="list-a-nav" href={% url "cust_home" %}>Home</a></li>
+            <li><a class="list-a-nav" href={% url "menu" %}>Menu</a></li>
+            <li><a class="list-a-nav" href="{% url "order" %}">Order</a></li>
+            <li><a class="list-a-nav" href={% url "custdetail" %}>Account</li>
+            {% if user.is_authenticated %}
+                        <li><a class="list-a-nav" href="{% url "logout" %}">Log Out</li>
+            {% else %}
+                        <li><a class="list-a-nav" href="{% url "login" %}">Log In</a></li>
+                        <li><a class="list-a-nav" href="{% url "custsignup" %}">Create Account</li>
+            {% endif %}
+            <li><a class="list-a-nav" href="{% url "cust_home" %}">Powered by Food for Thought</a></li>
         </ul>
-        <div style="margin-left:17%;padding:1px 16px;height:1000px;">
-            <h1>Menu</h1>
-            <h2>Craving for things on this page? Order on our <a href="{% url "order" %}">ordering page!</a></h2>
+        <div style="margin-left:17%; padding:24px 16px; height:100%;">
+            <h1 style="text-align: center; font-weight: bolder">Menu</h1>
+            <h2 style="text-align: center; font-style: italic; padding: 20px 20px;">Hungry? Of course you are! Order on our <a href="{% url "order" %}">ordering page!</a></h2>
                     <table style="width:100%">
-                    <tr>
+                    <tr style="font-size: x-large">
                         <th>Item</th>
                         <th>Price</th>
                         <th>Description</th>
                     </tr>
                         {% for item in items %}
                             <tr>
-                                <td><h3>{{ item.name }}</h3></td>
+                                <td><h3 style="font-weight: bolder">{{ item.name }}</h3></td>
                                 <td><h3>${{ item.price }}</h3></td>
-                                <td>{{ item.description }}</td>
-                                <td><img src="{{ item.image }}" alt="Food image" style="width:320px; height:214px;"></td>
+                                <td><p style="font-size: x-large">{{ item.description }}</p></td>
+                                <td style="padding-top: 15px"><img src="{{ item.image }}" alt="Food image" style="width:320px; height:214px; filter: drop-shadow(3px 3px 2px #000000);"></td>
                             </tr>
                         {% endfor %}
                     </table>

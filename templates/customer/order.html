@@ -1,135 +1,95 @@
-{% extends 'base.html' %}
+{% extends 'customer_base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Order Now{% endblock %}
 
 {% block stylesheet %}
-body {
-    margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
+    #items {
+      float: left;
+      height: 100%;
+      width: 50%;
+      padding: 0 10px;
+    }
 
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  width: 17%;
-  background-color: #cc0000;
-  position: fixed;
-  height: 100%;
-  overflow: auto;
-}
+    #boxes {
+      width: 50%;
+      float: right;
+      height: 100%;
+      padding: 0 10px;
+    }
 
-li a {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
+    #popup-1 {
+        display: none;
+        background-color: rgba(255,0,0,1);
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
 
-    li h1 {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-        li h4 {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-li a.active {
-  background-color: maroon;
-  color: white;
-}
-
-li a:hover:not(.active) {
-  background-color: maroon;
-  color: white;
-  }
-
-#items {
-  float: left;
-  height: 100%;
-  width: 50%;
-  padding: 0 10px;
-}
-
-#boxes {
-  width: 50%;
-  float: right;
-  height: 100%;
-  padding: 0 10px;
-}
-
-#popup-1 {
-	display: none;
-	background-color: rgba(255,0,0,1);
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-}
-
-.popup-content {
-	position: relative;
-	padding: 20px;
-	margin: 0 auto;
-	background-color: white;
-    border: 1px solid black;
-	width: 400px;
-	top: 5vh;
-}
-
+    .popup-content {
+        position: relative;
+        padding: 20px;
+        margin: 0 auto;
+        background-color: white;
+        border: 1px solid black;
+        width: 400px;
+        top: 5vh;
+    }
 {% endblock %}
 
 {% block content %}
-        <ul>
-            <li><h1>Frankie's Italian Cuisine</h1></li>
-            <li><a href={% url "cust_home" %}>Home</a></li>
-            <li><a href={% url "menu" %}>Menu</a></li>
-            <li><a href="{% url "order" %}">Order</a></li>
-            <li><h4>Powered by Food for Thought</h4></li>
-        </ul>
-        <div style="margin-left:17%;padding:1px 16px;height:100%;">
-            <h1>Order from Frankie's Italian Cuisine!</h1>
+        <ul class="ul-nav">
+            <li><h1 class="list-h1-nav">Frankie's Italian Cuisine</h1></li>
+            <li><a class="list-a-nav" href={% url "cust_home" %}>Home</a></li>
+            <li><a class="list-a-nav" href={% url "menu" %}>Menu</a></li>
+            <li><a class="list-a-nav" href="{% url "order" %}">Order</a></li>
+            <li><a class="list-a-nav" href={% url "custdetail" %}>Account</li>
             {% if user.is_authenticated %}
-                <h2>Logged in as {{  user.username }}. Not {{ user.username }}? <a href="{% url 'logout' %}">Log out</a></h2>
+                        <li><a class="list-a-nav" href="{% url "logout" %}">Log Out</li>
+            {% else %}
+                        <li><a class="list-a-nav" href="{% url "login" %}">Log In</a></li>
+                        <li><a class="list-a-nav" href="{% url "custsignup" %}">Create Account</li>
+            {% endif %}
+            <li><a class="list-a-nav" href="{% url "cust_home" %}">Powered by Food for Thought</a></li>
+        </ul>
+        <div style="margin-left:17%; padding:24px 16px; height:100%;">
+            <h1 style="text-align: center; font-weight: bolder">Order from Frankie's Italian Cuisine!</h1>
+            {% if user.is_authenticated %}
+                <h3 style="font-weight: bold; text-align: center">Logged in as {{  user.username }}. Not {{ user.username }}? <a href="{% url 'logout' %}">Log out</a></h3>
             {% else %}
                 <meta http-equiv="refresh" content="0; URL={% url "login" %}"/>
             {% endif %}
         <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-            <div id="items">
-                <table>
-                        <tr>
-                            <th>Item</th>
-                            <th>Price</th>
-                        </tr>
-                            {% for item in items %}
-                                <tr style="height: 36px">
-                                    <td>{{ item.name }}</td>
-                                    <td>${{ item.price }}</td>
+            <div>
+                <div id="items">
+                    <table style="width: 100%">
+                            <tr>
+                                <th>Item</th>
+                                <th>Price</th>
+                            </tr>
+                                {% for item in items %}
+                                    <tr style="height: 36px">
+                                        <td>{{ item.name }}</td>
+                                        <td>${{ item.price }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                </div>
+                <div id="boxes">
+                        <table>
+                                <tr>
+                                <th>Quantities</th>
+                                </tr>
+                            {{ formset.management_form }}
+                            {% for n_formset in formset %}
+                                <tr>
+                                <td>{{ n_formset.as_table }}</td>
                                 </tr>
                             {% endfor %}
                         </table>
-            </div>
-            <div id="boxes">
-                    <table>
-                            <tr>
-                            <th>Quantities</th>
-                            </tr>
-                        {{ formset.management_form }}
-                        {% for n_formset in formset %}
-                            <tr>
-                            <td>{{ n_formset.as_table }}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
+                </div>
             </div>
             <div id="popup-1">
                 <div class="popup-content">

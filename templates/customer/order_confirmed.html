@@ -1,53 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'customer_base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Order Confirmed{% endblock %}
 
 {% block stylesheet %}
-body {
-  margin: 0;
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  width: 17%;
-  background-color: #cc0000;
-  position: fixed;
-  height: 100%;
-  overflow: auto;
-}
-
-li a {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-    li h1 {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-        li h4 {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-li a.active {
-  background-color: maroon;
-  color: white;
-}
-
-li a:hover:not(.active) {
-  background-color: maroon;
-  color: white;
-}
 {% endblock %}
 
 {% block content %}

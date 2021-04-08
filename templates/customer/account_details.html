@@ -1,54 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'customer_base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Account Details{% endblock %}
 
 {% block stylesheet %}
-body {
-  margin: 0;
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  width: 17%;
-  background-color: #cc0000;
-  position: fixed;
-  height: 100%;
-  overflow: auto;
-}
-
-li a {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-    li h1 {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-        li h4 {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-li a.active {
-  background-color: maroon;
-  color: white;
-}
-
-li a:hover:not(.active) {
-  background-color: maroon;
-  color: white;
-  }
-
 #popup-1 {
 	display: none;
 	background-color: rgba(255,0,0,1);
@@ -72,51 +26,69 @@ li a:hover:not(.active) {
 {% endblock %}
 
 {% block content %}
-        <ul>
-            <li><h1>Frankie's Italian Cuisine</h1></li>
-            <li><a href={% url "cust_home" %}>Home</a></li>
-            <li><a href={% url "menu" %}>Menu</a></li>
-            <li><a href="{% url "order" %}">Order</a></li>
-            <li><h4>Powered by Food for Thought</h4></li>
-        </ul>
-        <div style="margin-left:17%;padding:1px 16px;height:1000px;">
-            <h1>Your Account Details</h1>
+        <ul class="ul-nav">
+            <li><h1 class="list-h1-nav">Frankie's Italian Cuisine</h1></li>
+            <li><a class="list-a-nav" href={% url "cust_home" %}>Home</a></li>
+            <li><a class="list-a-nav" href={% url "menu" %}>Menu</a></li>
+            <li><a class="list-a-nav" href="{% url "order" %}">Order</a></li>
+            <li><a class="list-a-nav" href={% url "custdetail" %}>Account</li>
             {% if user.is_authenticated %}
-                <h2>Logged in as {{  user.username }}. Not {{ user.username }}? <a href="{% url 'logout' %}">Log out</a></h2>
-                <h3>Account</h3>
-                    <table style="width:45%; margin:0 auto">
+                        <li><a class="list-a-nav" href="{% url "logout" %}">Log Out</li>
+            {% else %}
+                        <li><a class="list-a-nav" href="{% url "login" %}">Log In</a></li>
+                        <li><a class="list-a-nav" href="{% url "custsignup" %}">Create Account</li>
+            {% endif %}
+            <li><a class="list-a-nav" href="{% url "cust_home" %}">Powered by Food for Thought</a></li>
+        </ul>
+        <div style="margin-left:17%; padding:24px 16px; height:100%;">
+            <h1 style="text-align: center; font-weight: bolder">Your Account Details</h1>
+            {% if user.is_authenticated %}
+                <h3 style="font-weight: bold; text-align: center">Logged in as {{  user.username }}. Not {{ user.username }}? <a href="{% url 'logout' %}">Log out</a></h3>
+                <h3 style="font-weight: bold; text-align: center; padding: 25px;">Account</h3>
+                    <table style="width:65%; margin:0 auto">
                         <tr>
                             <th>Username</th>
                             <th>First name</th>
                             <th>Last name</th>
                             <th>Email address</th>
+                            <th>Password</th>
                         </tr>
                         <tr>
                             <td>{{ user.username }}</td>
                             <td>{{ user.first_name }}</td>
                             <td>{{ user.last_name }}</td>
                             <td>{{ user.email }}</td>
+                            <td><a href="{% url 'password_reset' %}">Change password</a></td>
                             <td><button id="showpopup">Update info</button></td>
                         </tr>
                     </table>
-                <a href="{% url 'password_reset' %}">Change password</a>
-                <h3>Your Previous Orders</h3>
-                <table style="width: 50%">
+                <h3 style="font-weight: bold; text-align: center; padding: 25px">Your Order History</h3>
+                {% for order in orders %}
+                <table style="width: 50%; margin:0 auto; padding: 20px">
                     <tr>
                         <th>Order ID</th>
                         <th>Order Date</th>
+                        <th>Order Total</th>
                         <th>Order Status</th>
                     </tr>
-                    {% for order in orders %}
                     <tr>
                         <td>{{ order.order }}</td>
                         <td>{{ order.order_date }}</td>
+                        <td>{{ order.total }}</td>
                         {% if order.complete == 0 %}
                             <td>In progress</td>
                         {% else %}
                             <td>Completed</td>
                         {% endif %}
                     </tr>
+                        <th>Items</th>
+                        <th>Quantity</th>
+                     {% for item in order.customerorders_set.all %}
+                        <tr>
+                            <td>{{ item.menu_item_id.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                        </tr>
+                 {% endfor %}
                 {% endfor %}
                 </table>
                     <div id="popup-1">

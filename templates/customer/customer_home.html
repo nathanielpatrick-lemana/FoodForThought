@@ -1,92 +1,42 @@
-{% extends 'base.html' %}
+{% extends 'customer_base.html' %}
 
 {% block title %}Home{% endblock %}
 
 {% block stylesheet %}
-body {
-  margin: 0;
-
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  width: 17%;
-  background-color: #cc0000;
-  position: fixed;
-  height: 100%;
-  overflow: auto;
-}
-
-li a {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-    li b {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-    li h1 {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-        li h4 {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-li a.active {
-  background-color: maroon;
-  color: white;
-}
-
-li a:hover:not(.active) {
-  background-color: maroon;
-  color: white;
-}
 {% endblock %}
 
 {% block content %}
-        <ul>
-            <li><h1>Frankie's Italian Cuisine</h1></li>
-            <li><a href={% url "cust_home" %}>Home</a></li>
-            <li><a href={% url "menu" %}>Menu</a></li>
-            <li><a href="{% url "order" %}">Order</a></li>
-            <li><a href={% url "custdetail" %}>Account</li>
-            <li><b href=null></b></li>
+        <ul class="ul-nav">
+            <li><h1 class="list-h1-nav">Frankie's Italian Cuisine</h1></li>
+            <li><a class="list-a-nav" href={% url "cust_home" %}>Home</a></li>
+            <li><a class="list-a-nav" href={% url "menu" %}>Menu</a></li>
+            <li><a class="list-a-nav" href="{% url "order" %}">Order</a></li>
+            <li><a class="list-a-nav" href={% url "custdetail" %}>Account</li>
             {% if user.is_authenticated %}
-                        <li><a href="{% url "logout" %}">Log Out</a></li>
+                        <li><a class="list-a-nav" href="{% url "logout" %}">Log Out</li>
             {% else %}
-                        <li><a href="{% url "login" %}">Log In</a></li>
-                        <li><a href="{% url "custsignup" %}">Create Account</a></li>
+                        <li><a class="list-a-nav" href="{% url "login" %}">Log In</a></li>
+                        <li><a class="list-a-nav" href="{% url "custsignup" %}">Create Account</li>
             {% endif %}
-            <li><h4>Powered by Food for Thought</h4></li>
+            <li><a class="list-a-nav" href="{% url "cust_home" %}">Powered by Food for Thought</a></li>
         </ul>
-        <div style="margin-left:17%;padding:1px 16px;height:1000px;background-image: url(https://cdn.discordapp.com/attachments/798661624181293086/820825114051870740/restaurant_interior.jpg);">
-            <h1>Welcome to Frankie's Italian Cuisine!</h1>
-            <h2>At Frankie's, we have a history dating back over 100 years of culinary excellence. Founded in 1903 in Derry, New Hampshire by first-generation immigrant Frank Filloccini, we have become southern New Hampshire's best Italian establishment. We hope we deliver the phenomenal dining experience we strive to give you!</h2>
+        <div style="margin-left:17%; padding:24px 16px; height:100%;">
+            <h1 style="text-align: center; font-weight: bold">Welcome to Frankie's Italian Cuisine!</h1>
+            <h2 style="text-align: center; padding:24px 16px;">At Frankie's, we have a history dating back over 100 years of culinary excellence. Founded in 1903 in Derry, New Hampshire by first-generation immigrant Frank Filloccini, we have become southern New Hampshire's best Italian establishment. We hope we deliver the phenomenal dining experience we strive to give you!</h2>
             {% if user.is_authenticated %}
-                <h3>Welcome, {{ user.username }}! <a href="{% url "order" %}">Order now!</a></h3>
+                <h3 style="font-weight: bold; text-align: center">Welcome, {{ user.username }}! <a href="{% url "order" %}">Order now!</a></h3>
             {% else %}
-                <h3>You are not logged in. <a href="{% url "custsignup" %}">Create an account here,</a> or <a href="{% url "login" %}">login here.</a></h3>
+                <h3 style="font-weight: bold; text-align: center">You are not logged in. <a href="{% url "custsignup" %}">Create an account here,</a> or <a href="{% url "login" %}">login here.</a></h3>
             {% endif %}
-            <table style="width:100%;">
-                <tr>
-                    <td><img src="https://cdn.discordapp.com/attachments/798661624181293086/820829543311867914/image.jpg" alt="Tomato and mushroom" style="width:600px;height:450px;object-fit: scale-down"></td>
-                    <td style="padding:1px 100px;"><h2>Find us at 71 North Main Street, Derry, NH 03038. We are open every day except Monday, from 11:30am until 9:00pm (last order at 8:30pm). We are operating at 50 percent capacity due to COVID-19. We deliver and offer curbside pickup!</h2></td>
+            <table style="margin-right: auto; margin-left: auto">
+                <tr style="align-content: center">
+                    <td><img src="https://cdn.discordapp.com/attachments/798661624181293086/829578935230398524/copper_top_oven_pizza.png" alt="Pizza in oven" style="width:400px;height:275px;object-fit: scale-down; filter: drop-shadow(3px 3px 2px #000000); padding: 15px"></td>
+                    <td><img src="https://cdn.discordapp.com/attachments/798661624181293086/820829543311867914/image.jpg" alt="Storefront" style="width:400px;height:275px;object-fit: scale-down;filter: drop-shadow(3px 3px 2px #000000); padding: 15px;"></td>
+                    <td><img src="https://cdn.discordapp.com/attachments/798661624181293086/820820581439897600/calzone-926449_1920.jpg" alt="Calzone" style="width:400px;height:275px;object-fit: scale-down; filter: drop-shadow(3px 3px 2px #000000); padding: 15px"></td>
                 </tr>
             </table>
-            <h3>Powered by the Food For Thought restaurant management platform.</h3>
+            <h2 style="text-align: center; padding-top: 15px">Find us at 71 North Main Street, Derry, NH 03038. We are open every day except Monday, from 11:30am until 9:00pm (last order at 8:30pm). We are operating at 50 percent capacity due to COVID-19. We deliver and offer curbside pickup!</h2>
+            <h6 style="font-weight: bold;">Powered by the Food For Thought restaurant management platform.</h6>
+            <img src="https://cdn.discordapp.com/attachments/798661624181293086/829581558150332456/fft_logo.png" style="width: 200px; height: 90px;">
         </div>
 {% endblock %}
