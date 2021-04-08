@@ -6,16 +6,23 @@
 {% endblock %}
 
 {% block content %}
-        <ul>
-            <li><h1>Frankie's Italian Cuisine</h1></li>
-            <li><a href={% url "cust_home" %}>Home</a></li>
-            <li><a href={% url "menu" %}>Menu</a></li>
-            <li><a href="{% url "order" %}">Order</a></li>
-            <li><h4>Powered by Food for Thought</h4></li>
+        <ul class="ul-nav">
+            <li><h1 class="list-h1-nav">Frankie's Italian Cuisine</h1></li>
+            <li><a class="list-a-nav" href={% url "cust_home" %}>Home</a></li>
+            <li><a class="list-a-nav" href={% url "menu" %}>Menu</a></li>
+            <li><a class="list-a-nav" href="{% url "order" %}">Order</a></li>
+            <li><a class="list-a-nav" href={% url "custdetail" %}>Account</li>
+            {% if user.is_authenticated %}
+                        <li><a class="list-a-nav" href="{% url "logout" %}">Log Out</li>
+            {% else %}
+                        <li><a class="list-a-nav" href="{% url "login" %}">Log In</a></li>
+                        <li><a class="list-a-nav" href="{% url "custsignup" %}">Create Account</li>
+            {% endif %}
+            <li><a class="list-a-nav" href="{% url "cust_home" %}">Powered by Food for Thought</a></li>
         </ul>
-        <div style="margin-left:17%;padding:1px 16px;height:1000px;">
-            <h1>Thank you {{  user.username }}! Your order has been confirmed.</h1>
-            <h2 style="font-weight: bold">Your order number is {{ new_id }}. Please take note of this order number when you arrive at the restaurant. A confirmation email has been sent to {{ user.email }}.</h2>
+        <div style="margin-left:17%;padding:24px 16px;height:1000px;">
+            <h1 style="font-weight: bold; text-align: center;">Thank you {{  user.username }}! Your order has been confirmed.</h1>
+            <h2 style="font-weight: bold; text-align: center; padding: 20px 20px;">Your order number is {{ new_id }}. Please take note of this order number when you arrive at the restaurant. A confirmation email has been sent to {{ user.email }}.</h2>
             <h3>Order contents</h3>
         <table style="width: 33%">
             <tr>

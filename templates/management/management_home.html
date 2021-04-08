@@ -1,69 +1,24 @@
-{% extends 'base.html' %}
+{% extends 'management_base.html' %}
 
 {% block title %}Home{% endblock %}
 
 {% block stylesheet %}
-body {
-  margin: 0;
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  width: 17%;
-  background-color: #cc0000;
-  position: fixed;
-  height: 100%;
-  overflow: auto;
-}
-
-li a {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-    li h1 {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-       li h2 {
-  display: block;
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-li a.active {
-  background-color: maroon;
-  color: white;
-}
-
-li a:hover:not(.active) {
-  background-color: maroon;
-  color: white;
-}
 {% endblock %}
 
 {% block content %}
 {% if user.is_authenticated and user.is_staff %}
-    <ul>
-        <li><h1>Food for Thought</h1></li>
-        <li><h2>Frankie's Italian Cuisine</h2></li>
-        <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'inventory' %}">Inventory</a></li>
-        <li><a href="{% url 'suppman' %}">Supply Management</a></li>
-        <li><a href="{% url 'sales' %}">Sales</a></li>
-        <li><a href="{% url 'activeorders' %}">Active Orders</a></li>
+    <ul class="ul-nav">
+        <li ><h1 class="list-h1-nav">Food for Thought</h1></li>
+        <li><h2 class="list-h2-nav">Frankie's Italian Cuisine</h2></li>
+        <li><a class="list-a-nav" href="{% url 'home' %}">Home</a></li>
+        <li><a class="list-a-nav" href="{% url 'inventory' %}">Inventory</a></li>
+        <li><a class="list-a-nav" href="{% url 'suppman' %}">Supply Management</a></li>
+        <li><a class="list-a-nav" href="{% url 'sales' %}">Sales</a></li>
+        <li><a class="list-a-nav" href="{% url 'activeorders' %}">Active Orders</a></li>
     </ul>
-    <div style="margin-left:17%;padding:1px 16px;height:1000px;">
-        <h1>Welcome, {{ user.username }}!</h1>
-        <h2><a>Welcome to the Food For Thought management interface.</a></h2>
+    <div style="margin-left:17%;padding:24px 16px;">
+        <h1 style="font-weight: bold">Welcome, {{ user.username }}!</h1>
+        <h2 style="font-style: oblique">Welcome to the Food For Thought management interface.</></h2>
 
         <p><a href="{% url 'logout' %}">Log Out</a></p>
         <p><a href="{% url 'password_reset' %}">Reset Password</a></p>
