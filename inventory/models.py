@@ -1,5 +1,6 @@
 from django.db import models
 from account.models import User
+from datetime import date
 
 class Item(models.Model):
     name = models.CharField(max_length=50)
@@ -65,8 +66,15 @@ class ItemStockLevels(models.Model):
 
 class StockHistory(models.Model):
     ingredient_id = models.OneToOneField(Ingredients, on_delete=models.CASCADE)
-    date = models.DateField(primary_key=True)
+    date_consumed_stock = models.DateField(default=date.today)
     stocklevel = models.IntegerField()
+    stock_history = models.IntegerField(primary_key=True, default=0)
+
+    def __str__(self):
+        return 'stock level: {}'.format(self.stocklevel)
+
+    class Meta:
+        unique_together = ('stock_history', 'ingredient_id')
 
 
 class PaymentCards(models.Model):

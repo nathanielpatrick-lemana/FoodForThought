@@ -20,6 +20,7 @@ from django.forms import formset_factory
 from django.core.mail import send_mail
 from django.http import JsonResponse
 import datetime
+from datetime import timedelta
 import numpy as np
 
 
@@ -87,9 +88,9 @@ def order(request):
             cursor.execute(
                 "SELECT inventory_itemstocklevels.quantity FROM inventory_itemstocklevels WHERE inventory_itemstocklevels.ingredient_name = '" + str(
                     ingredient_names[i]) + "';")
-            item_stock_result = cursor.fetchall()
-            item_stock_result = str(item_stock_result[0][0])
-            item_stock_result = int(item_stock_result)
+            item_stock = cursor.fetchall()
+            item_stock = str(item_stock[0][0])
+            item_stock = int(item_stock)
 
             # get the ingredient id
             cursor.execute(
@@ -100,7 +101,7 @@ def order(request):
             ingredient_id = int(ingredient_id)
 
             # store that result and subtract the corresponding ingredient amount
-            item_stock_result = item_stock_result - ingredient_amounts[i]
+            item_stock_result = item_stock - ingredient_amounts[i]
 
             # that resulting amount will be updated in item stock levels and given a new row in stock history
             cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = " + str(
@@ -109,7 +110,8 @@ def order(request):
             # insert new record into stock history
             today = datetime.date.today()
             cursor.execute(
-                  "INSERT INTO inventory_stockhistory(date, stocklevel, ingredient_id_id) VALUES ('" + str(today) + "', " + str(item_stock_result) +', ' + str(ingredient_id) + ');')
+                  "INSERT INTO inventory_stockhistory VALUES ('" + str(today) + "', " + str(item_stock_result) + ", " + str(i) + ", " + str(ingredient_id) + ") ON DUPLICATE KEY UPDATE stocklevel=" + str(item_stock_result) + ";")
+
         cursor.execute(
             "SELECT inventory_item.name, inventory_customerorders.quantity FROM inventory_customerorders, inventory_item WHERE inventory_customerorders.order_id_id =" + str(
                 new_id) + " AND inventory_item.id = inventory_customerorders.menu_item_id_id;")
@@ -280,8 +282,18 @@ def item_stock_level(request):
 
 # stock history will be recorded every day and will hold the stock level after every day of business
 def stock_consumption(request):
+    cursor = connection.cursor()
     # consumption is based off the date so date of the order
+    current_day = datetime.date.today()
+    start_monday = current_day - timedelta(days=current_day.weekday())
+    end_sunday = start_monday + timedelta(days=6)
 
+    #get the first 10 ingredients
+
+    for x in range(0,11):
+        cursor.execute(
+            "SELECT "
+        )
     # this function should run after every order
     # make sure to compare if the order will cause negative inventory or if the order will make inventory trip the restock (i.e hit or go under restock level)
     # if the order causes restock then run item stock level
