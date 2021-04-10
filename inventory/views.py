@@ -309,18 +309,16 @@ def stock_consumption(request):
     datasets = []
 
     cursor.execute(
-        "SELECT inventory_stockhistory.date_consumed_stock FROM inventory_stockhistory WHERE inventory_stockhistory.ingredient_id = " + str(
-            x) + " inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-05' AND '2021-04-11';"
+        "SELECT inventory_stockhistory.date_consumed_stock FROM inventory_stockhistory WHERE inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-05' AND '2021-04-11' AND inventory_stockhistory.ingredient_id = 1;"
     )
 
     labels = [item[0] for item in cursor.fetchall()]
 
-    for x in range(0, 11):
+    for x in range(1, 11):
         data = []
         cursor.execute(
             "SELECT inventory_stockhistory.stocklevel FROM inventory_stockhistory WHERE inventory_stockhistory.ingredient_id = " + str(
-                x) + " inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-05' AND '2021-04-11';"
-        )
+                x) + " AND inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-05' AND '2021-04-11';")
         data = [item[0] for item in cursor.fetchall()]
         datasets.append(data)
 

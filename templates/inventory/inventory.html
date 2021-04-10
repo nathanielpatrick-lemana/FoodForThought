@@ -28,8 +28,9 @@
                             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
                              <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
                             <script>
+                                const l = ['Flour', 'Salt']
                                 $(function () {
-                                    let $consumptionChart = $('#consumptionChart');
+                                    let $consumptionChart = $('#consumption');
                                     $.ajax({
                                         url: $consumptionChart.data('url'),
                                         success: function (data) {
@@ -37,15 +38,23 @@
                                             new Chart(ctx, {
                                                 type: 'line',
                                                 data: {
-                                                    labels: 'Consumption',
+                                                    labels: data.labels,
                                                     datasets: [{
-                                                        label: data.labels[0],
+                                                        label: l[0],
                                                         data:data.data[0],
-                                                        backgroundColor: 'red',
+                                                        borderColor: '#6929c4',
                                                     },{
-                                                        label: data.labels[1],
-                                                        data:data.data[1],
-                                                        backgroundColor: 'green',
+                                                        label: l[1],
+                                                        data: data.data[1],
+                                                        borderColor: '#fae'
+                                                    },{
+                                                        label: 'jiizz',
+                                                        data: data.data[2],
+                                                        borderColor: '#ccc'
+                                                    },{
+                                                        label: 'poo',
+                                                        data: data.data[3],
+                                                        borderColor: '#fae'
                                                     }]
                                                 },
 
