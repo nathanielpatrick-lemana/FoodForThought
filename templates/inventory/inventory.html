@@ -28,7 +28,7 @@
                             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
                              <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
                             <script>
-                                const l = ['Flour', 'Salt']
+                                const l = ['Flour', 'Yeast', 'Sugar', 'Olive Oil', 'Salt', 'Oregano', 'Mozzarella', 'Onion']
                                 $(function () {
                                     let $consumptionChart = $('#consumption');
                                     $.ajax({
@@ -42,19 +42,51 @@
                                                     datasets: [{
                                                         label: l[0],
                                                         data:data.data[0],
-                                                        borderColor: '#6929c4',
+                                                        borderColor: '#FB3640',
+                                                        backgroundColor: '#FB3640',
+                                                        fill: false
                                                     },{
                                                         label: l[1],
                                                         data: data.data[1],
-                                                        borderColor: '#fae'
+                                                        borderColor: '#00C9A7',
+                                                        backgroundColor: '#00C9A7',
+                                                        fill: false
                                                     },{
-                                                        label: 'jiizz',
+                                                        label: l[2],
                                                         data: data.data[2],
-                                                        borderColor: '#ccc'
+                                                        borderColor: '#55414C',
+                                                        backgroundColor: '#55414C',
+                                                        fill: false
                                                     },{
-                                                        label: 'poo',
+                                                        label: l[3],
                                                         data: data.data[3],
-                                                        borderColor: '#fae'
+                                                        borderColor: '#7556AD',
+                                                        backgroundColor: '#7556AD',
+                                                        fill: false
+                                                    },{
+                                                        label: l[4],
+                                                        data: data.data[4],
+                                                        borderColor: '#FF8156',
+                                                        backgroundColor: '#FF8156',
+                                                        fill: false
+                                                    },{
+                                                        label: l[5],
+                                                        data: data.data[5],
+                                                        borderColor: '#BB5B3E',
+                                                        backgroundColor: '#BB5B3E',
+                                                        fill: false
+                                                    },{
+                                                        label: l[6],
+                                                        data: data.data[6],
+                                                        borderColor: '#247BA0',
+                                                        backgroundColor: '#247BA0',
+                                                        fill: false
+                                                    },{
+                                                        label: l[7],
+                                                        data: data.data[7],
+                                                        borderColor: '#ABF88B',
+                                                        backgroundColor: '#ABF88B',
+                                                        fill: false
                                                     }]
                                                 },
 

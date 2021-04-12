@@ -84,6 +84,7 @@ def order(request):
                 order_id))
         ingredient_amounts = [item[1] for item in cursor.fetchall()]
         # run cursor execute update query based on the ingredient name
+        list_of_ingr_to_reorder = []
         for i in range(len(ingredient_names)):
             # using the ingredient name in list use an sql query to get the current stock level
             cursor.execute(
@@ -101,25 +102,28 @@ def order(request):
             ingredient_id = str(ingredient_id[0][0])
             ingredient_id = int(ingredient_id)
 
-            # store that result and subtract the corresponding ingredient amount
-            # run function to CHECK IF THE SUBTRACTION WILL RESULT IN NEGATIVE OR REORDER LEVEL
             item_stock_result = item_stock - ingredient_amounts[i]
+            # I want to be able to store the items i am reordering in case stock goes under
+            if check_if_hits_reorder(ingredient_id, item_stock_result):
+                list_of_ingr_to_reorder.append(ingredient_id)
+                cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = " + str(
+                    item_stock_result) + " WHERE inventory_itemstocklevels.ingredient_id_id = " + str(
+                    ingredient_id) + ";")
+            else:
+                # store that result and subtract the corresponding ingredient amount
+                cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = " + str(
+                    item_stock_result) + " WHERE inventory_itemstocklevels.ingredient_id_id = " + str(
+                    ingredient_id) + ";")
+                # that resulting amount will be updated in item stock levels and given a new row in stock history
+                # insert new record into stock history
 
-            # cursor.execute(
-            #   "SELECT inventory_stockhistory.stocklevel FROM inventory_stockhistory WHERE inventory_stockhistory.date_consumed_stock = " + str(
-            #        datetime.date.today()) + ";")
-            # inventory_out = cursor.fetchall()
-            # inventory_out = str(inventory_out[0])
-            # inventory_out = inventory_out + item_stock_result
-
-            # that resulting amount will be updated in item stock levels and given a new row in stock history
-            cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = " + str(
-                item_stock_result) + " WHERE inventory_itemstocklevels.ingredient_id_id = " + str(ingredient_id) + ";")
-
-            # insert new record into stock history
-            value = random.randint(11, 100)
             update_stock_history(item_stock_result, ingredient_id)
 
+        # at this point we will run the reorder function which passes a list of items to reorder
+        # this will inform the manager via email and send him the order form to approve
+        reorder_list(ingredient_names, list_of_ingr_to_reorder)
+
+        # display results
         cursor.execute(
             "SELECT inventory_item.name, inventory_customerorders.quantity FROM inventory_customerorders, inventory_item WHERE inventory_customerorders.order_id_id =" + str(
                 new_id) + " AND inventory_item.id = inventory_customerorders.menu_item_id_id;")
@@ -146,6 +150,63 @@ def order(request):
         'cardform': cardform,
     }
     return render(request, "customer/order.html", context)
+
+
+def check_if_hits_reorder(ingredient_id, inventory_left):
+    # basically i want to compare if the current stock level is enough to complete an order
+    # with the given inventory amount ordered. If it goes under the level
+    # (allow the user to customize these reorder levels) the program will pop up an inventory alert
+    # asking for the manager to sign in and approve. with the approval email with the order details
+    # will be sent
+    cursor = connection.cursor()
+    cursor.execute(
+        "SELECT inventory_ingredients.restock_level FROM inventory_ingredients WHERE inventory_ingredients.ingredient = " + str(
+            ingredient_id)
+    )
+    restock = [str(item) for item in cursor.fetchall()]
+
+    if restock > inventory_left:
+        return True
+    else:
+        return False
+
+
+def reorder_list(inventory_reorder_list, ingredient_id_list):
+    # given the list of inventory by id to reorder create an email to send to head manager with the items to reorder
+    # list of suppliers and amounts to reorder for each item
+    item_stock = []
+    cursor = connection.cursor()
+    for name in inventory_reorder_list:
+        cursor.execute(
+            "SELECT inventory_itemstocklevels.quantity FROM inventory_itemstocklevels WHERE inventory_itemstocklevels.ingredient_name = '" + str(
+                name) + "';")
+        item_stock.append([item[0] for item in cursor.fetchall()])
+    flat_list = []
+    for element in item_stock:
+        for item in element:
+            new_level = 2000 - item
+            flat_list.append(new_level)
+
+    for name in inventory_reorder_list:
+        cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = 2000, inventory_itemstocklevels.restock_date = '" + str(
+            datetime.date.today() + timedelta(days=1)) + "' WHERE inventory_itemstocklevels.ingredient_name = " + str(
+            name) + ";")
+        cursor.execute(
+            "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_name) VALUES ('" + str(
+                datetime.date.today() + timedelta(days=1)) + "', 2000, " + str(
+                name) + ");")
+
+    # create the email to the manager
+    message = "\n".join(['{}\t{}'.format(*t) for t in zip(inventory_reorder_list, flat_list)])
+    send_mail(
+        'New Inventory Order' + str(datetime.date.today()),
+        'Please bring your attention to reorder these ingredients.\n\n' + message +
+        '\n' +
+        'Order will be puchased from Gordon Food Service. Expected arrival in 1 day(s)',
+        'Frankie\'s Italian Cuisine',
+        ['frankiesitaliancuisine.fft@outlook.com'],
+        fail_silently=False,
+    )
 
 
 def acctdet(request):
@@ -282,15 +343,9 @@ def update_stock_history(item_stock, ing_id):
     today = datetime.date.today()
     cursor = connection.cursor()
     cursor.execute(
-        "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('2021-04-11', " + str(
+        "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('" + str(today) + "', " + str(
             item_stock) + ", " + str(
             ing_id) + ");")
-
-
-# item stock level will record the stock level of the item after every day
-def item_stock_level(request):
-    # this function will run when
-    bruh = []
 
 
 # stock history will be recorded every day and will hold the stock level after every day of business
