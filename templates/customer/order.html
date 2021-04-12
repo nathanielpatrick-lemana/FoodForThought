@@ -43,20 +43,6 @@
 {% endblock %}
 
 {% block content %}
-        <ul class="ul-nav">
-            <li><h1 class="list-h1-nav">Frankie's Italian Cuisine</h1></li>
-            <li><a class="list-a-nav" href={% url "cust_home" %}>Home</a></li>
-            <li><a class="list-a-nav" href={% url "menu" %}>Menu</a></li>
-            <li><a class="list-a-nav" href="{% url "order" %}">Order</a></li>
-            <li><a class="list-a-nav" href={% url "custdetail" %}>Account</li>
-            {% if user.is_authenticated %}
-                        <li><a class="list-a-nav" href="{% url "logout" %}">Log Out</li>
-            {% else %}
-                        <li><a class="list-a-nav" href="{% url "login" %}">Log In</a></li>
-                        <li><a class="list-a-nav" href="{% url "custsignup" %}">Create Account</li>
-            {% endif %}
-            <li><a class="list-a-nav" href="{% url "cust_home" %}">Powered by Food for Thought</a></li>
-        </ul>
         <div style="margin-left:17%; padding:24px 16px; height:100%;">
             <h1 style="text-align: center; font-weight: bolder">Order from Frankie's Italian Cuisine!</h1>
             {% if user.is_authenticated %}

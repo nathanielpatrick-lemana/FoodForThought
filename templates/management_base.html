@@ -85,6 +85,15 @@
 </head>
 <body>
   <main>
+    <ul class="ul-nav">
+        <li ><h1 class="list-h1-nav">Food for Thought</h1></li>
+        <li><h2 class="list-h2-nav">Frankie's Italian Cuisine</h2></li>
+        <li><a class="list-a-nav" href="{% url 'home' %}">Home</a></li>
+        <li><a class="list-a-nav" href="{% url 'inventory' %}">Inventory</a></li>
+        <li><a class="list-a-nav" href="{% url 'suppman' %}">Supply Management</a></li>
+        <li><a class="list-a-nav" href="{% url 'sales' %}">Sales</a></li>
+        <li><a class="list-a-nav" href="{% url 'activeorders' %}">Active Orders</a></li>
+    </ul>
     {% block content %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
