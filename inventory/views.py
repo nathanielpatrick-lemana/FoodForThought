@@ -85,6 +85,7 @@ def order(request):
         ingredient_amounts = [item[1] for item in cursor.fetchall()]
         # run cursor execute update query based on the ingredient name
         list_of_ingr_to_reorder = []
+
         for i in range(len(ingredient_names)):
             # using the ingredient name in list use an sql query to get the current stock level
             cursor.execute(
@@ -109,15 +110,17 @@ def order(request):
                 cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = " + str(
                     item_stock_result) + " WHERE inventory_itemstocklevels.ingredient_id_id = " + str(
                     ingredient_id) + ";")
+                update_stock_history(item_stock_result, ingredient_id)
             else:
                 # store that result and subtract the corresponding ingredient amount
                 cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = " + str(
                     item_stock_result) + " WHERE inventory_itemstocklevels.ingredient_id_id = " + str(
                     ingredient_id) + ";")
+                update_stock_history(item_stock_result, ingredient_id)
                 # that resulting amount will be updated in item stock levels and given a new row in stock history
                 # insert new record into stock history
 
-            update_stock_history(item_stock_result, ingredient_id)
+
 
         # at this point we will run the reorder function which passes a list of items to reorder
         # this will inform the manager via email and send him the order form to approve
@@ -161,11 +164,12 @@ def check_if_hits_reorder(ingredient_id, inventory_left):
     cursor = connection.cursor()
     cursor.execute(
         "SELECT inventory_ingredients.restock_level FROM inventory_ingredients WHERE inventory_ingredients.ingredient = " + str(
-            ingredient_id)
+            ingredient_id) + ";"
     )
-    restock = [str(item) for item in cursor.fetchall()]
+    restock = [item[0] for item in cursor.fetchall()]
+    restock = int(restock[0])
 
-    if restock > inventory_left:
+    if inventory_left < restock:
         return True
     else:
         return False
@@ -174,27 +178,35 @@ def check_if_hits_reorder(ingredient_id, inventory_left):
 def reorder_list(inventory_reorder_list, ingredient_id_list):
     # given the list of inventory by id to reorder create an email to send to head manager with the items to reorder
     # list of suppliers and amounts to reorder for each item
-    item_stock = []
+    reorder_item_stock = []
     cursor = connection.cursor()
     for name in inventory_reorder_list:
         cursor.execute(
             "SELECT inventory_itemstocklevels.quantity FROM inventory_itemstocklevels WHERE inventory_itemstocklevels.ingredient_name = '" + str(
                 name) + "';")
-        item_stock.append([item[0] for item in cursor.fetchall()])
+        reorder_item_stock.append([item[0] for item in cursor.fetchall()])
     flat_list = []
-    for element in item_stock:
+    for element in reorder_item_stock:
         for item in element:
             new_level = 2000 - item
             flat_list.append(new_level)
 
     for name in inventory_reorder_list:
-        cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = 2000, inventory_itemstocklevels.restock_date = '" + str(
-            datetime.date.today() + timedelta(days=1)) + "' WHERE inventory_itemstocklevels.ingredient_name = " + str(
-            name) + ";")
         cursor.execute(
-            "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_name) VALUES ('" + str(
+            "UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = 2000, inventory_itemstocklevels.restock_date = '" + str(
+                datetime.date.today() + timedelta(
+                    days=1)) + "' WHERE inventory_itemstocklevels.ingredient_name = '" + str(
+                name) + "';")
+    for id in ingredient_id_list:
+        if id == 4 or id == 7 or id == 10:
+            cursor.execute(
+                "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('" + str(
+                    datetime.date.today() + timedelta(days=1)) + "', 2500, " + str(
+                    id) + ");")
+        cursor.execute(
+            "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('" + str(
                 datetime.date.today() + timedelta(days=1)) + "', 2000, " + str(
-                name) + ");")
+                id) + ");")
 
     # create the email to the manager
     message = "\n".join(['{}\t{}'.format(*t) for t in zip(inventory_reorder_list, flat_list)])
@@ -337,14 +349,14 @@ def sales(request):
     })
 
 
-def update_stock_history(item_stock, ing_id):
+def update_stock_history(history_item_stock, ing_id):
     # update every ingredient stock history for every order that is placed (STICK INSIDE ORDER FUNCTION)
     # basically insert new row after calculating
     today = datetime.date.today()
     cursor = connection.cursor()
     cursor.execute(
-        "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('" + str(today) + "', " + str(
-            item_stock) + ", " + str(
+        "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('2021-04-10', " + str(
+            history_item_stock) + ", " + str(
             ing_id) + ");")
 
 
@@ -364,7 +376,7 @@ def stock_consumption(request):
     datasets = []
 
     cursor.execute(
-        "SELECT inventory_stockhistory.date_consumed_stock FROM inventory_stockhistory WHERE inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-05' AND '2021-04-11' AND inventory_stockhistory.ingredient_id = 1;"
+        "SELECT inventory_stockhistory.date_consumed_stock FROM inventory_stockhistory WHERE inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-07' AND '2021-04-12' AND inventory_stockhistory.ingredient_id = 1;"
     )
 
     labels = [item[0] for item in cursor.fetchall()]
@@ -373,7 +385,7 @@ def stock_consumption(request):
         data = []
         cursor.execute(
             "SELECT inventory_stockhistory.stocklevel FROM inventory_stockhistory WHERE inventory_stockhistory.ingredient_id = " + str(
-                x) + " AND inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-05' AND '2021-04-11';")
+                x) + " AND inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-06' AND '2021-04-11';")
         data = [item[0] for item in cursor.fetchall()]
         datasets.append(data)
 
