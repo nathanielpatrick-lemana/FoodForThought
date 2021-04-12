@@ -119,9 +119,6 @@ def order(request):
                 update_stock_history(item_stock_result, ingredient_id)
                 # that resulting amount will be updated in item stock levels and given a new row in stock history
                 # insert new record into stock history
-
-
-
         # at this point we will run the reorder function which passes a list of items to reorder
         # this will inform the manager via email and send him the order form to approve
         reorder_list(ingredient_names, list_of_ingr_to_reorder)
@@ -191,12 +188,12 @@ def reorder_list(inventory_reorder_list, ingredient_id_list):
             new_level = 2000 - item
             flat_list.append(new_level)
 
-    for name in inventory_reorder_list:
-        cursor.execute(
-            "UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = 2000, inventory_itemstocklevels.restock_date = '" + str(
-                datetime.date.today() + timedelta(
-                    days=1)) + "' WHERE inventory_itemstocklevels.ingredient_name = '" + str(
-                name) + "';")
+    #for name in inventory_reorder_list:
+    #    cursor.execute(
+    #        "UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = 2000, inventory_itemstocklevels.restock_date = '" + str(
+    #            datetime.date.today() + timedelta(
+    #                days=1)) + "' WHERE inventory_itemstocklevels.ingredient_name = '" + str(
+    #            name) + "';")
     for id in ingredient_id_list:
         if id == 4 or id == 7 or id == 10:
             cursor.execute(
