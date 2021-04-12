@@ -21,7 +21,22 @@
     border: 1px solid black;
 	width: 400px;
 	top: 5vh;
-}
+    }
+
+    th, td {
+	    border-bottom: 1px solid black;
+        padding: 7px;
+    }
+
+    .orderdetail{
+        background-color: red;
+        color: white;
+    }
+
+    .itemlist{
+        background-color: green;
+        color: white;
+    }
 
 {% endblock %}
 
@@ -45,7 +60,7 @@
             {% if user.is_authenticated %}
                 <h3 style="font-weight: bold; text-align: center">Logged in as {{  user.username }}. Not {{ user.username }}? <a href="{% url 'logout' %}">Log out</a></h3>
                 <h3 style="font-weight: bold; text-align: center; padding: 25px;">Account</h3>
-                    <table style="width:65%; margin:0 auto">
+                        <table style="width:67%; margin: 0 auto; background-color: rgba(255,255,255,0.85); padding: 750px; filter: drop-shadow(3px 3px 2px #8f8f8f);">
                         <tr>
                             <th>Username</th>
                             <th>First name</th>
@@ -64,33 +79,39 @@
                     </table>
                 <h3 style="font-weight: bold; text-align: center; padding: 25px">Your Order History</h3>
                 {% for order in orders %}
-                <table style="width: 50%; margin:0 auto; padding: 20px">
-                    <tr>
-                        <th>Order ID</th>
-                        <th>Order Date</th>
-                        <th>Order Total</th>
-                        <th>Order Status</th>
-                    </tr>
-                    <tr>
-                        <td>{{ order.order }}</td>
-                        <td>{{ order.order_date }}</td>
-                        <td>{{ order.total }}</td>
-                        {% if order.complete == 0 %}
-                            <td>In progress</td>
-                        {% else %}
-                            <td>Completed</td>
-                        {% endif %}
-                    </tr>
-                        <th>Items</th>
-                        <th>Quantity</th>
-                     {% for item in order.customerorders_set.all %}
+                <div style="padding-top: 40px">
+                    <table style="width:67%; margin: 0 auto; background-color: rgba(255,255,255,0.85); padding: 750px; filter: drop-shadow(3px 3px 2px #8f8f8f);">
                         <tr>
-                            <td>{{ item.menu_item_id.name }}</td>
-                            <td>{{ item.quantity }}</td>
+                            <th class="orderdetail">Order ID</th>
+                            <th class="orderdetail">Order Date</th>
+                            <th class="orderdetail">Order Total</th>
+                            <th class="orderdetail">Order Status</th>
                         </tr>
-                 {% endfor %}
+                        <tr>
+                            <td>{{ order.order }}</td>
+                            <td>{{ order.order_date }}</td>
+                            <td>{{ order.total }}</td>
+                            {% if order.complete == 0 %}
+                                <td>In progress</td>
+                            {% else %}
+                                <td>Completed</td>
+                            {% endif %}
+                        </tr>
+                        <table style="width: 67%;margin: 0 auto; background-color: rgba(255,255,255,0.85); filter: drop-shadow(3px 3px 2px #8f8f8f);">
+                            <tr>
+                                <th class="itemlist">Items</th>
+                                <th class="itemlist">Quantity</th>
+                            </tr>
+                         {% for item in order.customerorders_set.all %}
+                            <tr>
+                                <td>{{ item.menu_item_id.name }}</td>
+                                <td>{{ item.quantity }}</td>
+                            </tr>
+                     {% endfor %}
+                        </table>
+                    </table>
+                </div>
                 {% endfor %}
-                </table>
                     <div id="popup-1">
                         <div class="popup-content">
                             <h2>Update info</h2>

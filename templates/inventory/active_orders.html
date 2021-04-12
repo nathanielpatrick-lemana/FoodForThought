@@ -3,6 +3,40 @@
 {% block title %}Inventory{% endblock %}
 
 {% block stylesheet %}
+    #popup-1 {
+        display: none;
+        background-color: rgba(255,0,0,1);
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    .popup-content {
+        position: relative;
+        padding: 20px;
+        margin: 0 auto;
+        background-color: white;
+        border: 1px solid black;
+        width: 675px;
+        top: 5vh;
+    }
+        th, td {
+	    border-bottom: 1px solid black;
+        padding: 7px;
+    }
+
+    .orderdetail{
+        background-color: red;
+        color: white;
+    }
+
+    .itemlist{
+        background-color: green;
+        color: white;
+    }
+
 {% endblock %}
 
 {% block content %}
@@ -15,47 +49,73 @@
         <li><a class="list-a-nav" href="{% url 'suppman' %}">Supply Management</a></li>
         <li><a class="list-a-nav" href="{% url 'sales' %}">Sales</a></li>
         <li><a class="list-a-nav" href="{% url 'activeorders' %}">Active Orders</a></li>
+        <li><button id="showpopup" style="width: 100%; height: 40px;">Mark an order complete</button></li>
     </ul>
-    <div style="margin-left:17%;padding:24px 16px;height:1000px;">
-    <h1>Active Orders</h1>
+    <div style="margin-left:17%;padding:24px 16px;">
+    <h1 style="font-weight: bold">Active Orders</h1>
         {% if orders %}
         {% for order in orders %}
-            <table style="width:67%; margin:0 auto">
-            <tr>
-                <th>Order ID</th>
-                <th>Customer Name</th>
-                <th>Total before tax</th>
-                <th>Paid for?</th>
-            </tr>
-            <tr>
-                <td>{{ order.order }}</td>
-                <td>{{ order.custname }}</td>
-                <td>${{ order.total }}</td>
-                <td>{{ order.paid }}</td>
-            </tr>
-            <tr>
-            <th>Items</th>
-            </tr>
-             {% for item in order.customerorders_set.all %}
-                <tr>
-                    <td>{{ item.menu_item_id.name }}</td>
-                    <td>{{ item.quantity }}</td>
-                </tr>
-                 {% endfor %}
-            {% endfor %}
-            </table>
-            <h2>Push an order as completed</h2>
-            <form action="" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.management_form }}
-                {{ form.as_p }}
-            <input type="submit" value="Mark order completed">
-            </form>
+            <div style="padding-top: 55px">
+                <table style="width: 67%;margin: 0 auto; background-color: rgba(255,255,255,0.85); filter: drop-shadow(3px 3px 2px #8f8f8f);">
+                    <tr>
+                        <th class="orderdetail">Order ID</th>
+                        <th class="orderdetail">Customer Name</th>
+                        <th class="orderdetail">Total before tax</th>
+                        <th class="orderdetail">Paid for?</th>
+                    </tr>
+                    <tr>
+                        <td>{{ order.order }}</td>
+                        <td>{{ order.custname }}</td>
+                        <td>${{ order.total }}</td>
+                        <td>{{ order.paid }}</td>
+                    </tr>
+                </table>
+
+                <table style="width: 67%;margin: 0 auto; background-color: rgba(255,255,255,0.85); filter: drop-shadow(3px 3px 2px #8f8f8f);">
+                    <tr>
+                        <th class="itemlist">Items</th>
+                        <th class="itemlist">Quantity</th>
+                    </tr>
+                     {% for item in order.customerorders_set.all %}
+                        <tr>
+                            <td>{{ item.menu_item_id.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                        </tr>
+                     {% endfor %}
+                </table>
+
+                {% endfor %}
+            </div>
         {% else %}
             <p>No active orders</p>
         {% endif %}
     </div>
-    <
+            <div id="popup-1">
+                <div class="popup-content">
+                    <h2 style="font-weight: bold; font-size: large">Push an order as completed</h2>
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.management_form }}
+                            {{ form.as_p }}
+                            <input type="submit" value="Mark order completed">
+                        </form>
+                            <button id="close-popup-1">Cancel</button>
+                </div>
+            </div>
+    <script>
+        const popup1 = document.getElementById("popup-1");
+        const openPopup1 = document.getElementById("showpopup");
+        const closePopup1 = document.getElementById('close-popup-1');
+
+        showpopup.addEventListener('click', () => {
+            popup1.style.display = "block";
+        })
+
+        closePopup1.addEventListener('click', () => {
+            popup1.style.display = "none";
+        })
+    </script>
+
     {% else %}
         <p>You are not logged in</p>
         <a href="{% url 'login' %}">Log In</a>
