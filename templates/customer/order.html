@@ -36,6 +36,10 @@
         width: 400px;
         top: 5vh;
     }
+
+   td {
+    padding-top: 14px;
+    }
 {% endblock %}
 
 {% block content %}
@@ -64,28 +68,28 @@
         {% csrf_token %}
             <div>
                 <div id="items">
-                    <table style="width: 100%">
+                <table style="width:100%; margin: 0 auto;">
                             <tr>
                                 <th>Item</th>
                                 <th>Price</th>
                             </tr>
                                 {% for item in items %}
                                     <tr style="height: 36px">
-                                        <td>{{ item.name }}</td>
-                                        <td>${{ item.price }}</td>
+                                        <td style="padding-top: 65px">{{ item.name }}</td>
+                                        <td style="padding-top: 65px">${{ item.price }}</td>
                                     </tr>
                                 {% endfor %}
                             </table>
                 </div>
                 <div id="boxes">
-                        <table>
+                          <table style="width:25%;">
                                 <tr>
                                 <th>Quantities</th>
                                 </tr>
                             {{ formset.management_form }}
                             {% for n_formset in formset %}
                                 <tr>
-                                <td>{{ n_formset.as_table }}</td>
+                                <td>{{ n_formset.as_p }}</td>
                                 </tr>
                             {% endfor %}
                         </table>

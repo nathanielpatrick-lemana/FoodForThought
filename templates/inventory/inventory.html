@@ -3,6 +3,13 @@
 {% block title %}Inventory{% endblock %}
 
 {% block stylesheet %}
+    th, td {
+	border-bottom: 1px solid black;
+    padding: 15px;
+}
+    tr:hover {
+    background-color: lightgray;
+}
 {% endblock %}
 
 {% block content %}
@@ -16,95 +23,97 @@
         <li><a class="list-a-nav" href="{% url 'sales' %}">Sales</a></li>
         <li><a class="list-a-nav" href="{% url 'activeorders' %}">Active Orders</a></li>
     </ul>
-    <div style="margin-left:17%;padding:24px 16px;height:1000px;">
-    <h1>Inventory</h1>
-    <div class="col-md-10 col-12 mx-auto" >
-            <div class="row">
-                <div class="col-md-6 col-12">
-                    <div class="card" style="width:1000px;height:500px;margin-top:30px;">
-                        <div class="body">
-                            <canvas id="consumption" width="450" height="227" data-url="{% url 'stockConsumption' %}">
-                            </canvas>
-                            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-                             <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
-                            <script>
-                                const l = ['Flour', 'Yeast', 'Sugar', 'Olive Oil', 'Salt', 'Oregano', 'Mozzarella', 'Onion']
-                                $(function () {
-                                    let $consumptionChart = $('#consumption');
-                                    $.ajax({
-                                        url: $consumptionChart.data('url'),
-                                        success: function (data) {
-                                            const ctx = $consumptionChart[0].getContext('2d');
-                                            new Chart(ctx, {
-                                                type: 'line',
-                                                data: {
-                                                    labels: data.labels,
-                                                    datasets: [{
-                                                        label: l[0],
-                                                        data:data.data[0],
-                                                        borderColor: '#FB3640',
-                                                        backgroundColor: '#FB3640',
-                                                        fill: false
-                                                    },{
-                                                        label: l[1],
-                                                        data: data.data[1],
-                                                        borderColor: '#00C9A7',
-                                                        backgroundColor: '#00C9A7',
-                                                        fill: false
-                                                    },{
-                                                        label: l[2],
-                                                        data: data.data[2],
-                                                        borderColor: '#55414C',
-                                                        backgroundColor: '#55414C',
-                                                        fill: false
-                                                    },{
-                                                        label: l[3],
-                                                        data: data.data[3],
-                                                        borderColor: '#7556AD',
-                                                        backgroundColor: '#7556AD',
-                                                        fill: false
-                                                    },{
-                                                        label: l[4],
-                                                        data: data.data[4],
-                                                        borderColor: '#FF8156',
-                                                        backgroundColor: '#FF8156',
-                                                        fill: false
-                                                    },{
-                                                        label: l[5],
-                                                        data: data.data[5],
-                                                        borderColor: '#BB5B3E',
-                                                        backgroundColor: '#BB5B3E',
-                                                        fill: false
-                                                    },{
-                                                        label: l[6],
-                                                        data: data.data[6],
-                                                        borderColor: '#247BA0',
-                                                        backgroundColor: '#247BA0',
-                                                        fill: false
-                                                    },{
-                                                        label: l[7],
-                                                        data: data.data[7],
-                                                        borderColor: '#ABF88B',
-                                                        backgroundColor: '#ABF88B',
-                                                        fill: false
-                                                    }]
-                                                },
+    <div style="margin-left:17%; padding:24px 16px;">
+        <h1 style="font-weight: bold">Inventory</h1>
+        <h2 style="font-style: oblique; text-align: center; font-weight: bold;">Stockroom Consumption, past week</h2>
+        <div class="col-md-10 col-12 mx-auto;">
+                <div class="row">
+                    <div class="col-md-6 col-12"  style="margin: 0 auto;">
+                        <div class="card" style="width:1000px;height:500px;">
+                            <div class="body" >
+                                <canvas id="consumption" width="450" height="227" data-url="{% url 'stockConsumption' %}">
+                                </canvas>
+                                <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+                                 <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
+                                <script>
+                                    const l = ['Flour', 'Yeast', 'Sugar', 'Olive Oil', 'Salt', 'Oregano', 'Mozzarella', 'Onion']
+                                    $(function () {
+                                        let $consumptionChart = $('#consumption');
+                                        $.ajax({
+                                            url: $consumptionChart.data('url'),
+                                            success: function (data) {
+                                                const ctx = $consumptionChart[0].getContext('2d');
+                                                new Chart(ctx, {
+                                                    type: 'line',
+                                                    data: {
+                                                        labels: data.labels,
+                                                        datasets: [{
+                                                            label: l[0],
+                                                            data:data.data[0],
+                                                            borderColor: '#FB3640',
+                                                            backgroundColor: '#FB3640',
+                                                            fill: false
+                                                        },{
+                                                            label: l[1],
+                                                            data: data.data[1],
+                                                            borderColor: '#00C9A7',
+                                                            backgroundColor: '#00C9A7',
+                                                            fill: false
+                                                        },{
+                                                            label: l[2],
+                                                            data: data.data[2],
+                                                            borderColor: '#55414C',
+                                                            backgroundColor: '#55414C',
+                                                            fill: false
+                                                        },{
+                                                            label: l[3],
+                                                            data: data.data[3],
+                                                            borderColor: '#7556AD',
+                                                            backgroundColor: '#7556AD',
+                                                            fill: false
+                                                        },{
+                                                            label: l[4],
+                                                            data: data.data[4],
+                                                            borderColor: '#FF8156',
+                                                            backgroundColor: '#FF8156',
+                                                            fill: false
+                                                        },{
+                                                            label: l[5],
+                                                            data: data.data[5],
+                                                            borderColor: '#BB5B3E',
+                                                            backgroundColor: '#BB5B3E',
+                                                            fill: false
+                                                        },{
+                                                            label: l[6],
+                                                            data: data.data[6],
+                                                            borderColor: '#247BA0',
+                                                            backgroundColor: '#247BA0',
+                                                            fill: false
+                                                        },{
+                                                            label: l[7],
+                                                            data: data.data[7],
+                                                            borderColor: '#ABF88B',
+                                                            backgroundColor: '#ABF88B',
+                                                            fill: false
+                                                        }]
+                                                    },
 
-                                            })
-                                        }
+                                                })
+                                            }
 
+                                        })
                                     })
-                                })
-                         </script>
+                             </script>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
     </div>
     <br>
     <br>
+         <h2 style="font-style: oblique; text-align: center; font-weight: bold;">Current Stockroom</h2>
         {% if ingredients and instocks %}
-            <table style="width:55%; margin: 0 auto">
+            <table style="width:67%; margin: 0 auto; background-color: rgba(255,255,255,0.85); padding: 750px; filter: drop-shadow(3px 3px 2px #8f8f8f);">
             <tr>
                 <th>Item</th>
                 <th>Quantity (in units)</th>
@@ -118,13 +127,6 @@
                 {% endfor %}
                      </tr>
             </table>
-            <h2>Add new ingredient</h2>
-            <form action="" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.management_form }}
-                {{ form.as_p }}
-            <input type="submit" value="Add new ingredient">
-            </form>
         {% else %}
             <p>Nothing is in stock apparently</p>
         {% endif %}
