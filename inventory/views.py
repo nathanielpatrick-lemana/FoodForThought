@@ -85,7 +85,7 @@ def order(request):
         ingredient_amounts = [item[1] for item in cursor.fetchall()]
         # run cursor execute update query based on the ingredient name
         list_of_ingr_to_reorder = []
-
+        ingredient_names_reorder = []
         for i in range(len(ingredient_names)):
             # using the ingredient name in list use an sql query to get the current stock level
             cursor.execute(
@@ -107,6 +107,7 @@ def order(request):
             # I want to be able to store the items i am reordering in case stock goes under
             if check_if_hits_reorder(ingredient_id, item_stock_result):
                 list_of_ingr_to_reorder.append(ingredient_id)
+                ingredient_names_reorder.append(ingredient_names[i])
                 cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = " + str(
                     item_stock_result) + " WHERE inventory_itemstocklevels.ingredient_id_id = " + str(
                     ingredient_id) + ";")
@@ -121,7 +122,8 @@ def order(request):
                 # insert new record into stock history
         # at this point we will run the reorder function which passes a list of items to reorder
         # this will inform the manager via email and send him the order form to approve
-        reorder_list(ingredient_names, list_of_ingr_to_reorder)
+
+        reorder_list(ingredient_names_reorder, list_of_ingr_to_reorder)
 
         # display results
         cursor.execute(
@@ -187,33 +189,33 @@ def reorder_list(inventory_reorder_list, ingredient_id_list):
         for item in element:
             new_level = 2000 - item
             flat_list.append(new_level)
-
-    #for name in inventory_reorder_list:
-    #    cursor.execute(
-    #        "UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = 2000, inventory_itemstocklevels.restock_date = '" + str(
-    #            datetime.date.today() + timedelta(
-    #                days=1)) + "' WHERE inventory_itemstocklevels.ingredient_name = '" + str(
-    #            name) + "';")
+    tomorrow = str(datetime.date.today() + timedelta(
+                    days=3))
+    for name in inventory_reorder_list:
+        cursor.execute(
+            "UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = 2000, inventory_itemstocklevels.restock_date = '" + str(
+                tomorrow) + "' WHERE inventory_itemstocklevels.ingredient_name = '" + str(
+                name) + "';")
     for id in ingredient_id_list:
         if id == 4 or id == 7 or id == 10:
             cursor.execute(
                 "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('" + str(
-                    datetime.date.today() + timedelta(days=1)) + "', 2500, " + str(
+                    tomorrow) + "', 2500, " + str(
                     id) + ");")
-        cursor.execute(
-            "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('" + str(
-                datetime.date.today() + timedelta(days=1)) + "', 2000, " + str(
-                id) + ");")
+        else:
+            cursor.execute(
+                "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('" + str(
+                    tomorrow) + "', 2000, " + str(
+                    id) + ");")
 
     # create the email to the manager
     message = "\n".join(['{}\t{}'.format(*t) for t in zip(inventory_reorder_list, flat_list)])
     send_mail(
-        'New Inventory Order' + str(datetime.date.today()),
+        'New Inventory Order ' + str(datetime.date.today()),
         'Please bring your attention to reorder these ingredients.\n\n' + message +
-        '\n' +
         'Order will be puchased from Gordon Food Service. Expected arrival in 1 day(s)',
         'Frankie\'s Italian Cuisine',
-        ['frankiesitaliancuisine.fft@outlook.com'],
+        ['anthony.aleman@snhu.edu'],
         fail_silently=False,
     )
 
@@ -352,7 +354,7 @@ def update_stock_history(history_item_stock, ing_id):
     today = datetime.date.today()
     cursor = connection.cursor()
     cursor.execute(
-        "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('2021-04-10', " + str(
+        "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('2021-04-18', " + str(
             history_item_stock) + ", " + str(
             ing_id) + ");")
 
@@ -373,18 +375,28 @@ def stock_consumption(request):
     datasets = []
 
     cursor.execute(
-        "SELECT inventory_stockhistory.date_consumed_stock FROM inventory_stockhistory WHERE inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-07' AND '2021-04-12' AND inventory_stockhistory.ingredient_id = 1;"
+        "SELECT inventory_stockhistory.date_consumed_stock FROM inventory_stockhistory WHERE inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-12' AND '2021-04-18' AND inventory_stockhistory.ingredient_id = 1;"
     )
 
     labels = [item[0] for item in cursor.fetchall()]
-
-    for x in range(1, 11):
-        data = []
-        cursor.execute(
-            "SELECT inventory_stockhistory.stocklevel FROM inventory_stockhistory WHERE inventory_stockhistory.ingredient_id = " + str(
-                x) + " AND inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-06' AND '2021-04-11';")
-        data = [item[0] for item in cursor.fetchall()]
-        datasets.append(data)
+    temp = []
+    flat_list = []
+    for i in range(1, 11):
+        temp = []
+        # loop over the week
+        for j in range(0, 7):
+            #print('ingredint_id: {}'.format(i))
+            cursor.execute(
+                # maybe change query so that it ill select the lowest amounts
+                "SELECT min(inventory_stockhistory.stocklevel) FROM inventory_stockhistory WHERE inventory_stockhistory.ingredient_id = " + str(
+                    i) + " AND inventory_stockhistory.date_consumed_stock = '" + str(week_list[j]) + "';")
+            #print('week: {}'.format(week_list[j]))
+            data = cursor.fetchone()
+            #print('printing data: {}'.format(data))
+            temp.append(data)
+            #print('print temp: {}'.format(temp))
+        flat_list = [item[0] for item in temp]
+        datasets.append(flat_list)
 
     # merge all seperate data into a singular dataset
     # make sure to compare if the order will cause negative inventory or if the order will make inventory trip the restock (i.e hit or go under restock level)
