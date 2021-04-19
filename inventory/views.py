@@ -364,12 +364,12 @@ def update_stock_history(history_item_stock, ing_id):
 def stock_consumption(request):
     cursor = connection.cursor()
     # consumption is based off the date so date of the order
-    current_day = datetime.date.today()
+    current_day = '2021-04-12'
     start_monday = current_day - timedelta(days=current_day.weekday())
-    week_list = [start_monday]
-    for i in range(1, 7):
-        day = start_monday + timedelta(days=i)
-        week_list.append(day)
+    #week_list = ['2021-04-12']
+    #for i in range(1, 7):
+    #    day = current_day + timedelta(days=i)
+    #    week_list.append(day)
 
     # get the first 10 ingredients
     datasets = []
@@ -377,24 +377,21 @@ def stock_consumption(request):
     cursor.execute(
         "SELECT inventory_stockhistory.date_consumed_stock FROM inventory_stockhistory WHERE inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-12' AND '2021-04-18' AND inventory_stockhistory.ingredient_id = 1;"
     )
-
     labels = [item[0] for item in cursor.fetchall()]
     temp = []
+    week_list = ['2021-04-12', '2021-04-13', '2021-04-14', '2021-04-15', '2021-04-16', '2021-04-17', '2021-04-18']
+
     flat_list = []
     for i in range(1, 11):
         temp = []
         # loop over the week
         for j in range(0, 7):
-            #print('ingredint_id: {}'.format(i))
             cursor.execute(
                 # maybe change query so that it ill select the lowest amounts
                 "SELECT min(inventory_stockhistory.stocklevel) FROM inventory_stockhistory WHERE inventory_stockhistory.ingredient_id = " + str(
                     i) + " AND inventory_stockhistory.date_consumed_stock = '" + str(week_list[j]) + "';")
-            #print('week: {}'.format(week_list[j]))
             data = cursor.fetchone()
-            #print('printing data: {}'.format(data))
             temp.append(data)
-            #print('print temp: {}'.format(temp))
         flat_list = [item[0] for item in temp]
         datasets.append(flat_list)
 
@@ -402,8 +399,8 @@ def stock_consumption(request):
     # make sure to compare if the order will cause negative inventory or if the order will make inventory trip the restock (i.e hit or go under restock level)
     # if the order causes restock then run item stock level
     return JsonResponse(data={
-        'labels': labels,
-        'data': datasets,
+        'labels': week_list,
+        'data': datasets
     })
 
 
@@ -460,13 +457,46 @@ def average_weekly_sales(request):
         'data': average_weekly,
     })
 
-
-def aggregated_order(request, order):
-    # this function will return the aggregated amounts of an order
+def daily_revenue(request):
+    bruh = []
     with connection.cursor() as cursor:
         cursor.execute(
-            ""
+            "SELECT inventory_item.name, avg(inventory_customerorders.quantity) AS 'avg sales' FROM inventory_orders, inventory_customerorders, inventory_item WHERE inventory_orders.order = inventory_customerorders.order_id_id AND inventory_item.id = inventory_customerorders.menu_item_id_id GROUP BY inventory_item.name;")
+        menu_items = [item[0] for item in cursor.fetchall()]
+        cursor.execute(
+            "SELECT inventory_item.name, avg(inventory_customerorders.quantity) AS 'avg sales' FROM inventory_orders, inventory_customerorders, inventory_item WHERE inventory_orders.order = inventory_customerorders.order_id_id AND inventory_item.id = inventory_customerorders.menu_item_id_id GROUP BY inventory_item.name;")
+        average_daily = [item[1] for item in cursor.fetchall()]
+        cursor.execute(
+            "SELECT inventory_item.price FROM inventory_item WHERE inventory_item.id > 0;"
         )
+        item_prices = [item[0] for item in cursor.fetchall()]
+        for i in range(0, np.size(average_daily)):
+            average_daily[i] = average_daily[i] * item_prices[i]
+    return JsonResponse(data={
+        'labels': menu_items,
+        'data': average_daily,
+    })
+
+
+def weekly_revenue(request):
+    bruh = []
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT inventory_item.name, avg(inventory_customerorders.quantity) AS 'avg sales' FROM inventory_orders, inventory_customerorders, inventory_item WHERE inventory_orders.order = inventory_customerorders.order_id_id AND inventory_item.id = inventory_customerorders.menu_item_id_id GROUP BY inventory_item.name;")
+        menu_items = [item[0] for item in cursor.fetchall()]
+        cursor.execute(
+            "SELECT inventory_item.name, avg(inventory_customerorders.quantity) AS 'avg sales' FROM inventory_orders, inventory_customerorders, inventory_item WHERE inventory_orders.order = inventory_customerorders.order_id_id AND inventory_item.id = inventory_customerorders.menu_item_id_id GROUP BY inventory_item.name;")
+        average_daily = [item[1] for item in cursor.fetchall()]
+        cursor.execute(
+            "SELECT inventory_item.price FROM inventory_item WHERE inventory_item.id > 0;"
+        )
+        item_prices = [item[0] for item in cursor.fetchall()]
+        for i in range(0, np.size(average_daily)):
+            average_daily[i] = average_daily[i] * item_prices[i] * 7
+    return JsonResponse(data={
+        'labels': menu_items,
+        'data': average_daily,
+    })
 
 
 def aggregated_date(request, date):
