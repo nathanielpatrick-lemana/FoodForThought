@@ -3,26 +3,30 @@
 {% block title %}Order Confirmed{% endblock %}
 
 {% block stylesheet %}
+        td {
+	border-bottom: 1px solid black;
+    padding: 15px;
+}
 {% endblock %}
 
 {% block content %}
-        <div style="margin-left:17%;padding:24px 16px;height:1000px;">
+        <div style="margin-left:17%;padding:24px 16px;">
             <h1 style="font-weight: bold; text-align: center;">Thank you {{  user.username }}! Your order has been confirmed.</h1>
             <h2 style="font-weight: bold; text-align: center; padding: 20px 20px;">Your order number is {{ new_id }}. Please take note of this order number when you arrive at the restaurant. A confirmation email has been sent to {{ user.email }}.</h2>
-            <h3>Order contents</h3>
-        <table style="width: 33%">
+            <h1 style="font-weight: bold; text-align: center;">Order contents</h1>
+        <table style="width:67%; margin: 0 auto; background-color: rgba(255,255,255,0.85); padding: 750px; filter: drop-shadow(3px 3px 2px #8f8f8f);">
             <tr>
-                <th>Item</th>
-                <th>Quantity</th>
+                <th style="font-size: xxx-large">Item</th>
+                <th style="font-size: xxx-large">Quantity</th>
             </tr>
             {% for item in results %}
                 <tr>
-                        <td>{{ item.0 }}</td>
-                        <td>{{ item.1 }}</td>
+                        <td style="font-size: xx-large">{{ item.0 }}</td>
+                        <td style="font-size: xx-large">{{ item.1 }}</td>
                 </tr>
             {% endfor %}
         </table>
-            <h3>Order total (pre-tax)</h3>
-            <p>${{ total }} paid using card ending in {{ cardno }}</p>
+            <h2 style="text-align: center;">Order total (pre-tax)</h2>
+            <h3 style="text-align: center;">${{ total }} paid using card ending in {{ cardno }}</h3>
         </div>
 {% endblock %}

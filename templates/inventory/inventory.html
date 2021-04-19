@@ -3,9 +3,17 @@
 {% block title %}Inventory{% endblock %}
 
 {% block stylesheet %}
-    th, td {
+    td {
 	border-bottom: 1px solid black;
     padding: 15px;
+}
+
+    th {
+    border-bottom: 1px solid black;
+    padding: 15px;
+    position: sticky;
+    top: 0;
+    background-color: rgba(255,255,255,0.85);
 }
     tr:hover {
     background-color: lightgray;
@@ -14,15 +22,6 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-    <ul class="ul-nav">
-        <li ><h1 class="list-h1-nav">Food for Thought</h1></li>
-        <li><h2 class="list-h2-nav">Frankie's Italian Cuisine</h2></li>
-        <li><a class="list-a-nav" href="{% url 'home' %}">Home</a></li>
-        <li><a class="list-a-nav" href="{% url 'inventory' %}">Inventory</a></li>
-        <li><a class="list-a-nav" href="{% url 'suppman' %}">Supply Management</a></li>
-        <li><a class="list-a-nav" href="{% url 'sales' %}">Sales</a></li>
-        <li><a class="list-a-nav" href="{% url 'activeorders' %}">Active Orders</a></li>
-    </ul>
     <div style="margin-left:17%; padding:24px 16px;">
         <h1 style="font-weight: bold">Inventory</h1>
         <h2 style="font-style: oblique; text-align: center; font-weight: bold;">Stockroom Consumption, past week</h2>
