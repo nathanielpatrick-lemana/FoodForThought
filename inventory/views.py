@@ -213,11 +213,21 @@ def reorder_list(inventory_reorder_list, ingredient_id_list):
     send_mail(
         'New Inventory Order ' + str(datetime.date.today()),
         'Please bring your attention to reorder these ingredients.\n\n' + message +
-        'Order will be puchased from Gordon Food Service. Expected arrival in 1 day(s)',
+        '\nOrder will be puchased from Gordon Food Service. Expected arrival in 1 day(s)',
         'Frankie\'s Italian Cuisine',
         ['anthony.aleman@snhu.edu'],
         fail_silently=False,
     )
+
+    send_mail(
+        'Inventory Purchase Order ' + str(datetime.date.today()),
+        'Bill of Materials.\n\n' + message +
+        '\nOrder From Frankie\'s Italian Cuisine',
+        'Frankie\'s Italian Cuisine',
+        ['gordonfoodservice641@gmail.com'],
+        fail_silently=False,
+    )
+
 
 
 def acctdet(request):
@@ -354,7 +364,7 @@ def update_stock_history(history_item_stock, ing_id):
     today = datetime.date.today()
     cursor = connection.cursor()
     cursor.execute(
-        "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('2021-04-18', " + str(
+        "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('2021-04-23', " + str(
             history_item_stock) + ", " + str(
             ing_id) + ");")
 
@@ -364,22 +374,22 @@ def update_stock_history(history_item_stock, ing_id):
 def stock_consumption(request):
     cursor = connection.cursor()
     # consumption is based off the date so date of the order
-    current_day = '2021-04-12'
+    current_day = datetime.date.today()
     start_monday = current_day - timedelta(days=current_day.weekday())
-    #week_list = ['2021-04-12']
-    #for i in range(1, 7):
-    #    day = current_day + timedelta(days=i)
-    #    week_list.append(day)
+    week_list = [start_monday]
+    for i in range(1, 7):
+        day = start_monday + timedelta(days=i)
+        week_list.append(day)
 
     # get the first 10 ingredients
     datasets = []
 
     cursor.execute(
-        "SELECT inventory_stockhistory.date_consumed_stock FROM inventory_stockhistory WHERE inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-12' AND '2021-04-18' AND inventory_stockhistory.ingredient_id = 1;"
+        "SELECT inventory_stockhistory.date_consumed_stock FROM inventory_stockhistory WHERE inventory_stockhistory.date_consumed_stock BETWEEN '2021-04-19' AND '2021-04-25' AND inventory_stockhistory.ingredient_id = 1;"
     )
     labels = [item[0] for item in cursor.fetchall()]
     temp = []
-    week_list = ['2021-04-12', '2021-04-13', '2021-04-14', '2021-04-15', '2021-04-16', '2021-04-17', '2021-04-18']
+    #week_list = ['2021-04-19', '2021-04-20', '2021-04-21', '2021-04-22', '2021-04-23', '2021-04-24', '2021-04-25']
 
     flat_list = []
     for i in range(1, 11):
@@ -399,7 +409,7 @@ def stock_consumption(request):
     # make sure to compare if the order will cause negative inventory or if the order will make inventory trip the restock (i.e hit or go under restock level)
     # if the order causes restock then run item stock level
     return JsonResponse(data={
-        'labels': week_list,
+        'labels': labels,
         'data': datasets
     })
 
