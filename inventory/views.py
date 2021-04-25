@@ -86,7 +86,7 @@ def order(request):
         # run cursor execute update query based on the ingredient name
         list_of_ingr_to_reorder = []
         ingredient_names_reorder = []
-        for i in range(len(ingredient_names)):
+        for i in range(len(ingredient_amounts)):
             # using the ingredient name in list use an sql query to get the current stock level
             cursor.execute(
                 "SELECT inventory_itemstocklevels.quantity FROM inventory_itemstocklevels WHERE inventory_itemstocklevels.ingredient_name = '" + str(
@@ -95,7 +95,6 @@ def order(request):
             item_stock = str(item_stock[0][0])
             item_stock = int(item_stock)
 
-            # get the ingredient id
             cursor.execute(
                 "SELECT inventory_itemstocklevels.ingredient_id_id FROM inventory_itemstocklevels WHERE inventory_itemstocklevels.ingredient_name = '" + str(
                     ingredient_names[i]) + "';")
@@ -103,15 +102,19 @@ def order(request):
             ingredient_id = str(ingredient_id[0][0])
             ingredient_id = int(ingredient_id)
 
-            item_stock_result = item_stock - ingredient_amounts[i]
+            item_stock_result = int(item_stock) - ingredient_amounts[i]
             # I want to be able to store the items i am reordering in case stock goes under
             if check_if_hits_reorder(ingredient_id, item_stock_result):
-                list_of_ingr_to_reorder.append(ingredient_id)
-                ingredient_names_reorder.append(ingredient_names[i])
-                cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = " + str(
-                    item_stock_result) + " WHERE inventory_itemstocklevels.ingredient_id_id = " + str(
-                    ingredient_id) + ";")
-                update_stock_history(item_stock_result, ingredient_id)
+
+                if item_stock_result <= 0:
+                    update_stock_history(item_stock, ingredient_id)
+                    list_of_ingr_to_reorder.append(ingredient_id)
+                    ingredient_names_reorder.append(ingredient_names[i])
+                    cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = " + str(
+                        item_stock) + " WHERE inventory_itemstocklevels.ingredient_id_id = " + str(
+                        ingredient_id) + ";")
+                else:
+                    update_stock_history(item_stock_result, ingredient_id)
             else:
                 # store that result and subtract the corresponding ingredient amount
                 cursor.execute("UPDATE inventory_itemstocklevels SET inventory_itemstocklevels.quantity = " + str(
@@ -315,6 +318,7 @@ def activeorder(request):
 
 
 @staff_member_required
+# ADD EMAIL FOR SUPPLIER
 def suppman(request):
     form = RestockForm(request.POST or None)
     instocks = Ingredients.objects.all()
@@ -364,7 +368,7 @@ def update_stock_history(history_item_stock, ing_id):
     today = datetime.date.today()
     cursor = connection.cursor()
     cursor.execute(
-        "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('2021-04-23', " + str(
+        "INSERT INTO inventory_stockhistory(date_consumed_stock, stocklevel, ingredient_id) VALUES ('2021-04-25', " + str(
             history_item_stock) + ", " + str(
             ing_id) + ");")
 
